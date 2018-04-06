@@ -1,0 +1,90 @@
+body {
+    font-family: Georgia, Times, "Times New Roman", serif;
+    font-size: 18px;
+}
+
+#lobby, #game, #results {
+    display: none;
+}
+
+#newGame, #start {
+    /* position: absolute;
+    bottom: 0; */
+    margin: 20px 0;
+}
+
+.spy {
+    text-align: center;
+    background: #c94c4c;
+    color: white;
+    font-weight: bold;
+    padding: 20px 0;
+}
+
+.resistance {
+    text-align: center;
+    background: #034f84;
+    color: white;
+    padding: 20px 0;
+    font-weight: bold;
+}
+
+.observer {
+    text-align: center;
+    background: #888888;
+    color: white;
+    padding: 20px 0;
+    font-weight: bold;
+}
+
+.first {
+    padding: 20px 0;
+    background: #deeaee;
+    text-align: center;
+}
+
+.player-count {
+    padding: 20px 0;
+    background: #deeaee;
+    text-align: center;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.centered {
+    text-align: center;
+    padding:10px 0;
+}
+
+li {
+    padding: 6px 10px;
+}
+
+
+.game-type{
+    text-align: center;
+    margin-top:10px;
+}
+.game-type button{
+    width:80%;
+    border-radius: 4px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+.button-success:before {
+    content: '(1st) ';
+}
+.button-success {
+    color: white;
+    background: rgb(28, 184, 65); /* this is a green */
+}
+.button-secondary:before {
+    content: '(2nd) ';
+}
+.button-secondary {
+    color: white;
+    background: rgb(66, 184, 221); /* this is a light blue */
+}
