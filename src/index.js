@@ -45,6 +45,7 @@ const auth = new Auth({
 $(function () {
   $('#newGame').click(function () {
     stateRef.remove();
+    renderGameStartButton();
   });
 
   $('#start').click(function () {
@@ -88,9 +89,9 @@ stateRef.on("value", function (snap) {
     // Check these are valid.
 
     const role = Role(self);
-    const visible = role.getVisible(state.players);
 
     $('#game_type').text(state.game.label);
+    $('.playerCount').html( Object.keys(state.players).length );
 
     $('#first_player').text(state.first.name);
     $('#team')
@@ -106,16 +107,25 @@ stateRef.on("value", function (snap) {
     else {
       $('#team').addClass('observer');
     }
-
-    if( visible.length ) {
-      $('#visible_list').empty();
-      visible.forEach(p => {
-        $('#visible_list').append(`<li>${p.name} (${p.card})</li>`);
-      });
-    }
-    else {
+    const visible = role.getVisible(state.players);
+    $('#visible_list').empty();
+    visible.forEach(p => {
+      const otherRole = Role(p);
+      $('#visible_list').append(`<li>${p.name} (${otherRole.mask || p.card})</li>`);
+    });
+    if (!visible.length) {
       $('#visible_list').text('(none)')
     }
+
+    const invisible = role.getInvisibleCards(state.players);
+    $('#invisible_list').empty();
+    invisible.forEach(card => {
+      $('#invisible_list').append(`<li>${card}</li>`);
+    });
+    if (!invisible.length) {
+      $('#invisible_list').text('(none)')
+    }
+
   } else {
     // There is no game state.
     $('#game').show();
@@ -133,13 +143,16 @@ listRef.on("value", function (snap) {
 
   $('#playerList').empty();
 
-  players = [];
-  snap.forEach(child => {
-    players.push(child.val());
-    $('#playerList').append('<li>' + child.val().name + '</li>');
+  const playerList = snap.val();
+  players = Object.keys(playerList).map(uid => playerList[uid]);
+
+  const playerNames = players.map(p => p.name).sort();
+
+  playerNames.forEach(name => {
+    $('#playerList').append(`<li>${name}</li>`);
   });
 
-  $('#playerCount').html(playerCount);
+  $('.peopleCount').html(playerCount);
   renderGameStartButton();
 });
 
@@ -211,7 +224,6 @@ function resolveGameType () {
 }
 
 function onGameType (type) {
-  console.log("PLAYERS?", type, players)
   const gameState = Game(type, players);
   stateRef.set(gameState);
   $('#start').prop("disabled", true);

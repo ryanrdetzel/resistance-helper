@@ -2,6 +2,15 @@
 import NormalGame from './NormalGame';
 import DefectorGame from './DefectorGame';
 import ReverserGame from './ReverserGame';
+import AssassinGame from './AssassinGame';
+import InquisitorGame from './InquisitorGame';
+import TrapperGame from './TrapperGame';
+import HunterGame from './HunterGame';
+import HunterDummyGame from './HunterDummyGame';
+import HunterCoordinatorGame from './HunterCoordinatorGame';
+import HunterDeepAgentGame from './HunterDeepAgentGame';
+import HunterPretenderGame from './HunterPretenderGame';
+import HunterBlameGame from './HunterBlameGame';
 
 export default function Game (type, presence) {
 
@@ -28,6 +37,24 @@ function factory(type) {
       return ReverserGame;
     case 'game-defector':
       return DefectorGame;
+    case 'game-assassin':
+      return AssassinGame;
+    case 'game-trapper':
+      return TrapperGame;
+    case 'game-inquisitor':
+      return InquisitorGame;
+    case 'game-hunter':
+      return HunterGame;
+    case 'game-hunter-dummy':
+      return HunterDummyGame;
+    case 'game-hunter-coordinator':
+      return HunterCoordinatorGame;
+    case 'game-hunter-deep-agent':
+      return HunterDeepAgentGame;
+    case 'game-hunter-pretender':
+      return HunterPretenderGame;
+    case 'game-hunter-blame':
+      return HunterBlameGame;
     default:
       return NormalGame;
   }

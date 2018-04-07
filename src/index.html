@@ -23,13 +23,8 @@
 
 <!-- GAME -->
 <div id="game" class="pure-g">
-    <div class="pure-u-1 pure-u-md-1-1 player-count">
-        <strong>
-            <span id="playerCount">0</span> People
-        </strong>
-    </div>
     <div class="pure-u-1 pure-u-md-1-1 centered">
-        <strong>Players</strong>
+        <strong>Players(<span class="peopleCount">0</span>)</strong>
         <ul id="playerList"></ul>
     </div>
 
@@ -47,19 +42,47 @@
             <div class="pure-u-1-2">
                 <button class="pure-button button-large game-option" id="game-defector">Defector</button>
             </div>
-        </div>
-        <!--
-        <div class="pure-g game-type">
             <div class="pure-u-1-2">
-                <button class="pure-button button-large game-option" id="game-hunter">Hunter</button>
+                <button class="pure-button button-large game-option" id="game-assassin">Assassin</button>
             </div>
+        </div>
+        <div class="pure-g game-type">
             <div class="pure-u-1-2">
                 <button class="pure-button button-large game-option" id="game-trapper">Trapper</button>
             </div>
             <div class="pure-u-1-2">
                 <button class="pure-button button-large game-option" id="game-inquisitor">Inquisitor</button>
             </div>
-        </div>-->
+        </div>
+        <div class="pure-g game-type">
+            <div class="pure-u-1-2">
+                <strong>Hunter Module</strong>
+            </div>
+        </div>
+        <div class="pure-g game-type">
+            <div class="pure-u-1-2">
+                <button class="pure-button button-large game-option" id="game-hunter">Normal</button>
+            </div>
+            <div class="pure-u-1-2">
+                <button class="pure-button button-large game-option" id="game-hunter-coordinator">Coordinator</button>
+            </div>
+        </div>
+        <div class="pure-g game-type">
+            <div class="pure-u-1-2">
+                <button class="pure-button button-large game-option" id="game-hunter-dummy">Dummy</button>
+            </div>
+            <div class="pure-u-1-2">
+                <button class="pure-button button-large game-option" id="game-hunter-deep-agent">Deep Agent</button>
+            </div>
+        </div>
+        <div class="pure-g game-type">
+            <div class="pure-u-1-2">
+                <button class="pure-button button-large game-option" id="game-hunter-pretender">Pretender</button>
+            </div>
+            <div class="pure-u-1-2">
+                <button class="pure-button button-large game-option" id="game-hunter-blam">Blame</button>
+            </div>
+        </div>
     </div>
     <div class="pure-u-1 pure-u-md-1-1">
         <form class="pure-form" onsubmit="return false;">
@@ -83,8 +106,15 @@
         <ul class="pure-u-1" id="visible_list">
         </ul>
     </div>
-    <hr />
+    <div class="pure-u-1 pure-u-md-1-1 centered">
+        <strong>Not Visible</strong>
+        <ul class="pure-u-1" id="invisible_list">
+        </ul>
+    </div>
     <div class="pure-u-1 first">
+        <span class="playerCount">0</span> Players
+        &nbsp;
+        &nbsp;
         <strong id="first_player"> x </strong> goes first
     </div>
     <div class="pure-u-1 pure-u-md-1-1">

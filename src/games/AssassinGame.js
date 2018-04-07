@@ -1,12 +1,12 @@
 
-import { GOOD, SPY } from './Roles'
+import { GOOD, GOOD_COMMANDER, SPY, SPY_ASSASSIN } from './Roles'
 
 export default {
   label: "Normal",
   minPlayers: 5,
   cards: [
-    GOOD,
-    SPY,
+    GOOD_COMMANDER,
+    SPY_ASSASSIN,
     GOOD,
     GOOD,
     SPY,

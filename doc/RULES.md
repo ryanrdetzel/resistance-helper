@@ -1,5 +1,6 @@
 
 https://tesera.ru/images/items/547689/TheResistanceHiddenAgendarules.pdf
+
 https://tesera.ru/images/items/775433/Resistance%20(Hostile%20Intent)%20rules%20(eng).pdf
 
 Normal
