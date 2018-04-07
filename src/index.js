@@ -3,15 +3,26 @@ import Game from './games/Game';
 import Voting from './voting/RankedChoiceVoting';
 import Role, { OBSERVER } from './games/Roles';
 
-// Initialize Firebase
-var config = {
-  apiKey: "AIzaSyDhSSM3kQmouCbLmrg1GK-qSMZKuLFAW1k",
-  authDomain: "test-60f3a.firebaseapp.com",
-  databaseURL: "https://test-60f3a.firebaseio.com",
-  projectId: "test-60f3a",
-  storageBucket: "test-60f3a.appspot.com",
-  messagingSenderId: "997935352484"
-};
+// Dev Firebase
+// var config = {
+//   apiKey: "AIzaSyDhSSM3kQmouCbLmrg1GK-qSMZKuLFAW1k",
+//   authDomain: "test-60f3a.firebaseapp.com",
+//   databaseURL: "https://test-60f3a.firebaseio.com",
+//   projectId: "test-60f3a",
+//   storageBucket: "test-60f3a.appspot.com",
+//   messagingSenderId: "997935352484"
+// };
+
+// Production
+const config = {
+  apiKey: "AIzaSyALThai8CYhmSG91fsN499Kl-Mf1vP-_pY",
+  authDomain: "resistance-1ec7a.firebaseapp.com",
+  databaseURL: "https://resistance-1ec7a.firebaseio.com",
+  projectId: "resistance-1ec7a",
+  storageBucket: "resistance-1ec7a.appspot.com",
+  messagingSenderId: "383282710233"
+}
+
 firebase.initializeApp(config);
 
 var MIN_PLAYERS = 2;
