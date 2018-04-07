@@ -63,6 +63,7 @@ export class Role {
 
       case SPY_DEEP_AGENT:
         this.isSpy = true;
+        this.mask = SPY_DEEP_AGENT;
         this.canSee = [];
         break;
 
@@ -82,18 +83,22 @@ export class Role {
     }
   }
 
-  getVisible(players) {
-    const playerList = Object.keys(players).map(uid => players[uid]);
-    return playerList.filter(p =>
-      (p.uid !== this.player.uid) && (this.canSee.indexOf(p.card) !== -1)
+  getVisibleRoles(players) {
+    const playerList = Object.keys(players).map(uid => new Role(players[uid]));
+    const visible = playerList.filter(r =>
+      (r.player.uid !== this.player.uid) && (this.canSee.indexOf(r.player.card) !== -1)
     );
+    return visible.sort(sortCard);
   }
-  getInvisibleCards(players) {
-    const playerList = Object.keys(players).map(uid => players[uid]);
-    const invisiblePlayers = playerList.filter(p => (p.uid !== this.player.uid) && (this.canSee.indexOf(p.card) === -1));
-    return invisiblePlayers.map(p => p.card).sort();
-
+  getInvisibleRoles(players) {
+    const playerList = Object.keys(players).map(uid => new Role(players[uid]));
+    const invisible = playerList.filter(r => (r.player.uid !== this.player.uid) && (this.canSee.indexOf(r.player.card) === -1))
+    return invisible.sort(sortCard);
   }
 }
 
-
+function sortCard (a, b) {
+  const acard = a.mask || a.player.card;
+  const bcard = b.mask || b.player.card;
+  return acard.localeCompare(bcard);
+}

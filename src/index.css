@@ -33,6 +33,14 @@ strong {
     font-weight: bold;
 }
 
+.spy-player {
+    background: rgba(201, 76, 76, 0.25);
+}
+
+.resistance-player {
+    background: rgba(3, 79, 132, 0.25);
+}
+
 .observer {
     text-align: center;
     background: #888888;
@@ -64,6 +72,8 @@ ul {
 .centered {
     text-align: center;
     padding:10px 0;
+    margin-right: auto;
+    margin-left: auto;
 }
 
 li {
@@ -72,16 +82,21 @@ li {
     margin: 2px;
     min-width: 100px;
     border-radius: 8px;
-    background: rgba(66, 184, 221, .05); /* this is a light blue */
+    background: rgba(0, 0, 0, 0.1);
 }
 
-.game-type{
+#game_list {
     text-align: center;
-    margin-top:10px;
+    padding: 10px 10px;
+    max-width: 600px;
 }
-.game-type button{
-    width:80%;
+
+.game-option {
+    font-size: 14px;
+    display: inline-block;
     border-radius: 4px;
+    margin: 2px;
+    min-width: 180px;
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
 }
 .button-success:before {

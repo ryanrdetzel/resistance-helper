@@ -3,6 +3,7 @@ import { GOOD, GOOD_CHIEF, GOOD_HUNTER, GOOD_DUMMY, SPY, SPY_CHIEF, SPY_HUNTER }
 
 export default {
   label: "Hunter (Dummy)",
+  id: "hunter-dummy",
   minPlayers: 5,
   cards: [
     GOOD_CHIEF,

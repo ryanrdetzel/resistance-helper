@@ -3,6 +3,7 @@ import { GOOD, GOOD_CHIEF, GOOD_HUNTER, GOOD_COORDINATOR, SPY, SPY_CHIEF, SPY_HU
 
 export default {
   label: "Hunter (Coordinator)",
+  id: 'game-hunter-coordinator',
   minPlayers: 5,
   cards: [
     GOOD_CHIEF,

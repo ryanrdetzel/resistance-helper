@@ -1,27 +1,27 @@
 import Auth from './auth/TwitterAuth';
-import Game from './games/Game';
+import GameSetup, { GAMES } from './games/Game';
 import Voting from './voting/RankedChoiceVoting';
 import Role, { OBSERVER } from './games/Roles';
 
 // Dev Firebase
-// var config = {
-//   apiKey: "AIzaSyDhSSM3kQmouCbLmrg1GK-qSMZKuLFAW1k",
-//   authDomain: "test-60f3a.firebaseapp.com",
-//   databaseURL: "https://test-60f3a.firebaseio.com",
-//   projectId: "test-60f3a",
-//   storageBucket: "test-60f3a.appspot.com",
-//   messagingSenderId: "997935352484"
-// };
+const config = {
+  apiKey: "AIzaSyDhSSM3kQmouCbLmrg1GK-qSMZKuLFAW1k",
+  authDomain: "test-60f3a.firebaseapp.com",
+  databaseURL: "https://test-60f3a.firebaseio.com",
+  projectId: "test-60f3a",
+  storageBucket: "test-60f3a.appspot.com",
+  messagingSenderId: "997935352484"
+};
 
 // Production
-const config = {
-  apiKey: "AIzaSyALThai8CYhmSG91fsN499Kl-Mf1vP-_pY",
-  authDomain: "resistance-1ec7a.firebaseapp.com",
-  databaseURL: "https://resistance-1ec7a.firebaseio.com",
-  projectId: "resistance-1ec7a",
-  storageBucket: "resistance-1ec7a.appspot.com",
-  messagingSenderId: "383282710233"
-}
+// const config = {
+//   apiKey: "AIzaSyALThai8CYhmSG91fsN499Kl-Mf1vP-_pY",
+//   authDomain: "resistance-1ec7a.firebaseapp.com",
+//   databaseURL: "https://resistance-1ec7a.firebaseio.com",
+//   projectId: "resistance-1ec7a",
+//   storageBucket: "resistance-1ec7a.appspot.com",
+//   messagingSenderId: "383282710233"
+// }
 
 firebase.initializeApp(config);
 
@@ -65,10 +65,6 @@ $(function () {
 
   $('#join').click(function () {
     auth.signIn();
-  });
-
-  $('.game-option').click(function(event) {
-    selectGameType(event.target.id);
   });
 });
 
@@ -118,28 +114,47 @@ stateRef.on("value", function (snap) {
     else {
       $('#team').addClass('observer');
     }
-    const visible = role.getVisible(state.players);
-    $('#visible_list').empty();
-    visible.forEach(p => {
-      const otherRole = Role(p);
-      $('#visible_list').append(`<li>${p.name} (${otherRole.mask || p.card})</li>`);
+    const visible = role.getVisibleRoles(state.players);
+    const $visible = $('#visible_list').empty();
+    visible.forEach(r=> {
+      const $el = $(`<li>${r.mask || r.player.card} (${r.player.name})</li>`);
+      if(! r.mask ) {
+        $el.addClass(r.isSpy ? 'spy-player' : 'resistance-player');
+      }
+      $visible.append($el);
     });
     if (!visible.length) {
-      $('#visible_list').text('(none)')
+      $visible.text('(none)')
     }
 
-    const invisible = role.getInvisibleCards(state.players);
-    $('#invisible_list').empty();
-    invisible.forEach(card => {
-      $('#invisible_list').append(`<li>${card}</li>`);
+    const invisible = role.getInvisibleRoles(state.players);
+    const $invisible = $('#invisible_list').empty();
+    invisible.forEach(r => {
+      const $el = $(`<li>${r.mask || r.player.card}</li>`);
+      if(! r.mask ) {
+        $el.addClass(r.isSpy ? 'spy-player' : 'resistance-player');
+      }
+      $invisible.append($el);
     });
     if (!invisible.length) {
-      $('#invisible_list').text('(none)')
+      $invisible.text('(none)')
     }
 
   } else {
     // There is no game state.
+
     $('#game').show();
+    const $gameList = $('#game_list').empty();
+    GAMES.forEach(game => {
+      const str = `<button class="pure-button button-large game-option" id="${game.id}">${game.label}</button>`;
+      $gameList.append(str);
+    });
+
+    renderSelections();
+
+    $('.game-option').click(event => {
+      selectGameType(event.target.id);
+    });
 
     if (players.length >= MIN_PLAYERS) {
       $('#start').prop("disabled", false);
@@ -160,7 +175,8 @@ listRef.on("value", function (snap) {
   const playerNames = players.map(p => p.name).sort();
 
   playerNames.forEach(name => {
-    $('#playerList').append(`<li>${name}</li>`);
+    const str = `<li>${name}</li>`;
+    $('#playerList').append();
   });
 
   $('.peopleCount').html(playerCount);
@@ -171,6 +187,8 @@ function selectGameType(button_id){
   // If it's primary, ignore
   // if it's secondary, make primary
   // If it's not, make it secondary
+
+  console.log("game type?", button_id)
 
   const user = firebase.auth().currentUser;
 
@@ -190,9 +208,7 @@ function selectGameType(button_id){
     else  selectedGameTypeSecondary = button_id;
   }
 
-  $('.game-option').removeClass('button-secondary').removeClass('button-success');
-  if (selectedGameTypePrimary !== "") $('#' + selectedGameTypePrimary).addClass('button-success');
-  if (selectedGameTypeSecondary !== "") $('#' + selectedGameTypeSecondary).addClass('button-secondary');
+  renderSelections();
 
   if (user && user.uid) {
     const ballotRef = firebase.database().ref(`ballots/${user.uid}`);
@@ -202,6 +218,12 @@ function selectGameType(button_id){
     });
     ballotRef.onDisconnect().remove();
   }
+}
+
+function renderSelections(){
+  $('.game-option').removeClass('button-secondary').removeClass('button-success');
+  if (selectedGameTypePrimary !== "") $('#' + selectedGameTypePrimary).addClass('button-success');
+  if (selectedGameTypeSecondary !== "") $('#' + selectedGameTypeSecondary).addClass('button-secondary');
 }
 
 let ballots = [];
@@ -235,7 +257,7 @@ function resolveGameType () {
 }
 
 function onGameType (type) {
-  const gameState = Game(type, players);
+  const gameState = GameSetup(type, players);
   stateRef.set(gameState);
   $('#start').prop("disabled", true);
 }

@@ -3,6 +3,7 @@ import { GOOD, GOOD_CHIEF, GOOD_HUNTER, SPY_DEEP_AGENT, SPY_CHIEF, SPY_HUNTER } 
 
 export default {
   label: "Hunter (Deep Agent)",
+  id: 'game-hunter-deep-agent',
   minPlayers: 7,
   cards: [
     GOOD_CHIEF,

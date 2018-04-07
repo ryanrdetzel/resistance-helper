@@ -12,9 +12,23 @@ import HunterDeepAgentGame from './HunterDeepAgentGame';
 import HunterPretenderGame from './HunterPretenderGame';
 import HunterBlameGame from './HunterBlameGame';
 
-export default function Game (type, presence) {
 
-  const game = factory(type);
+export const GAMES = [
+  NormalGame, DefectorGame, ReverserGame, AssassinGame, InquisitorGame, TrapperGame,
+  HunterGame, HunterDummyGame, HunterCoordinatorGame, HunterDeepAgentGame, HunterPretenderGame, HunterBlameGame
+];
+
+const gamesById = {};
+GAMES.forEach(game => gamesById[game.id]= game);
+
+export default function GameSetup (type, presence) {
+
+  console.log("GAMES?", gamesById);
+  const game = gamesById[type];
+
+  if (!game){
+    throw new Error(`Unknown Game: ${type}`)
+  }
   const players = deal(game.cards, presence);
 
   /* Who goes first? */
@@ -28,35 +42,6 @@ export default function Game (type, presence) {
     },
     players,
     first
-  }
-}
-
-function factory(type) {
-  switch (type) {
-    case 'game-reverser':
-      return ReverserGame;
-    case 'game-defector':
-      return DefectorGame;
-    case 'game-assassin':
-      return AssassinGame;
-    case 'game-trapper':
-      return TrapperGame;
-    case 'game-inquisitor':
-      return InquisitorGame;
-    case 'game-hunter':
-      return HunterGame;
-    case 'game-hunter-dummy':
-      return HunterDummyGame;
-    case 'game-hunter-coordinator':
-      return HunterCoordinatorGame;
-    case 'game-hunter-deep-agent':
-      return HunterDeepAgentGame;
-    case 'game-hunter-pretender':
-      return HunterPretenderGame;
-    case 'game-hunter-blame':
-      return HunterBlameGame;
-    default:
-      return NormalGame;
   }
 }
 

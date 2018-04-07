@@ -2,7 +2,8 @@
 import { GOOD, GOOD_COMMANDER, SPY, SPY_ASSASSIN } from './Roles'
 
 export default {
-  label: "Normal",
+  label: "Assassin",
+  id: "game-assassin",
   minPlayers: 5,
   cards: [
     GOOD_COMMANDER,

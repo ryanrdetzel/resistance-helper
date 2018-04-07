@@ -5,7 +5,8 @@ import {
 } from './Roles'
 
 export default {
-  label: "Hunter (Deep Agent)",
+  label: "Hunter (Pretender)",
+  id: "game-hunter-pretender",
   minPlayers: 7,
   cards: [
     GOOD_CHIEF,
