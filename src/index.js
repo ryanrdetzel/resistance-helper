@@ -1,15 +1,16 @@
-import GameAuth from './auth/TwitterAuth';
-import GameFactory from './games/GameFactory';
+import Auth from './auth/TwitterAuth';
+import Game from './games/Game';
 import Voting from './voting/RankedChoiceVoting';
+import Role, { OBSERVER } from './games/Roles';
 
 // Initialize Firebase
-const config = {
-  apiKey: "AIzaSyALThai8CYhmSG91fsN499Kl-Mf1vP-_pY",
-  authDomain: "resistance-1ec7a.firebaseapp.com",
-  databaseURL: "https://resistance-1ec7a.firebaseio.com",
-  projectId: "resistance-1ec7a",
-  storageBucket: "resistance-1ec7a.appspot.com",
-  messagingSenderId: "383282710233"
+var config = {
+  apiKey: "AIzaSyDhSSM3kQmouCbLmrg1GK-qSMZKuLFAW1k",
+  authDomain: "test-60f3a.firebaseapp.com",
+  databaseURL: "https://test-60f3a.firebaseio.com",
+  projectId: "test-60f3a",
+  storageBucket: "test-60f3a.appspot.com",
+  messagingSenderId: "997935352484"
 };
 firebase.initializeApp(config);
 
@@ -19,10 +20,12 @@ var players = [];
 var selectedGameTypePrimary = '';
 var selectedGameTypeSecondary = '';
 
-var listRef = firebase.database().ref("presense");
-var stateRef = firebase.database().ref("state");
+const listRef = firebase.database().ref("presense");
+const stateRef = firebase.database().ref("state");
+const ballotsRef = firebase.database().ref('ballots');
 
-const auth = new GameAuth({
+
+const auth = new Auth({
   onAuth(user){
     if (user) {
       const userRef = firebase.database().ref("presense/" + user.uid);
@@ -55,8 +58,6 @@ $(function () {
   $('.game-option').click(function(event) {
     selectGameType(event.target.id);
   });
-
-  selectGameType('game-normal');
 });
 
 
@@ -80,26 +81,26 @@ stateRef.on("value", function (snap) {
     let self = state.players[myuid];
 
     if (! self){
-      self = {
-        ...user,
-        role: 'observer'
-      }
+      // logged in after the game
+      self = { ...user, card: OBSERVER };
     }
+
     // Check these are valid.
 
-    const game = GameFactory.gameType(state.type);
-    const visible = game.filterVisible(myuid, state.players);
+    const role = Role(self);
+    const visible = role.getVisible(state.players);
 
-    $('#game_type').text(game.LABEL.toUpperCase());
+    $('#game_type').text(state.game.label);
 
     $('#first_player').text(state.first.name);
-    $('#team').text(self.role.toUpperCase());
-    $('#team').removeClass('resistance').removeClass('spy').removeClass('observer');
+    $('#team')
+      .text(self.card)
+      .removeClass('resistance').removeClass('spy').removeClass('observer');
 
-    if (self.isSpy) {
+    if (role.isSpy) {
       $('#team').addClass('spy');
     }
-    else if (self.isSpy === false ) {
+    else if (role.isSpy === false ) {
       $('#team').addClass('resistance');
     }
     else {
@@ -109,7 +110,7 @@ stateRef.on("value", function (snap) {
     if( visible.length ) {
       $('#visible_list').empty();
       visible.forEach(p => {
-        $('#visible_list').append(`<li>${p.name} (${p.role.toUpperCase()})</li>`);
+        $('#visible_list').append(`<li>${p.name} (${p.card})</li>`);
       });
     }
     else {
@@ -139,13 +140,7 @@ listRef.on("value", function (snap) {
   });
 
   $('#playerCount').html(playerCount);
-
-  if (playerCount >= MIN_PLAYERS) {
-    $('#start').prop("disabled", false);
-  } else {
-    $('#start').prop("disabled", true);
-  }
-
+  renderGameStartButton();
 });
 
 function selectGameType(button_id){
@@ -185,6 +180,19 @@ function selectGameType(button_id){
   }
 }
 
+let ballots = [];
+ballotsRef.on('value', snapshot => {
+  const userBallots = snapshot.val() || {};
+  ballots = Object.keys(userBallots).map(uid => userBallots[uid] );
+  renderGameStartButton();
+});
+
+function renderGameStartButton () {
+  const hasPlayers = players.length >= MIN_PLAYERS;
+  const hasBallot = ballots.length > 0;
+  $('#start').prop("disabled", !(hasPlayers && hasBallot));
+}
+
 function startGame () {
   resolveGameType();
 }
@@ -202,25 +210,9 @@ function resolveGameType () {
   })
 }
 
-/*
-  Choose the teams.
-  Choose who goes first
-*/
-function onGameType( gameType ) {
-
-  const game = GameFactory.gameType(gameType);
-
-  /* Who goes first? */
-  const firstIndex = Math.floor( Math.random() * players.length);
-  const first = players[firstIndex];
-
-  const setup = game.setup(players);
-  stateRef.set({
-    type: gameType,
-    players: setup.players,
-    deck: setup.deck,
-    first
-  });
-
+function onGameType (type) {
+  console.log("PLAYERS?", type, players)
+  const gameState = Game(type, players);
+  stateRef.set(gameState);
   $('#start').prop("disabled", true);
 }

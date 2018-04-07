@@ -1,10 +1,17 @@
+import { Role } from './Roles';
 
-export function shuffle (deck) {
-  const shuffled = [];
-  const input = deck.slice();
-  while (input.length) {
-    const i = Math.floor( Math.random() * input.length );
-    shuffled.push(input.splice(i, 1)[0]);
+
+export function getVisible (uid, players) {
+  const self = players[uid];
+  if (self){
+    return []
   }
-  return shuffled;
+  const canSee = Role(self.card).canSee;
+  return Object.keys(players)
+    .map(id => players[id])
+    .filter(p => {
+      return canSee.indexOf(p.card) !== -1
+    });
 }
+
+
