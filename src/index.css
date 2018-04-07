@@ -34,7 +34,7 @@ strong {
 }
 
 .spy-player {
-    background: rgba(201, 76, 76, 0.25);
+    background: rgba(201, 76, 76, 0.35);
 }
 
 .resistance-player {
@@ -50,8 +50,8 @@ strong {
 }
 
 .first {
-    padding: 20px 0;
-    background: #deeaee;
+    padding: 8px 0;
+    background: #eeeeee;
     text-align: center;
 }
 
@@ -60,6 +60,15 @@ strong {
     background: #deeaee;
     text-align: center;
 }
+
+#playerList {
+    font-size: 14px;
+}
+
+#playerList li {
+    background: lightgreen;
+}
+
 
 ul {
     list-style: none;

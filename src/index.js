@@ -191,7 +191,7 @@ listRef.on("value", function (snap) {
 
   playerNames.forEach(name => {
     const str = `<li>${name}</li>`;
-    $('#playerList').append();
+    $('#playerList').append(str);
   });
 
   $('.peopleCount').html(playerCount);
