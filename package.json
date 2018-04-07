@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npm run clean && webpack",
     "clean": "rm -rf dist",
-    "deploy": "firebase deploy",
+    "deploy": "npm run build && firebase deploy",
     "start": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --open"
   },
   "dependencies": {

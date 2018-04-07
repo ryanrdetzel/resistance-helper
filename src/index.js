@@ -3,25 +3,30 @@ import GameSetup, { GAMES } from './games/Game';
 import Voting from './voting/RankedChoiceVoting';
 import Role, { OBSERVER } from './games/Roles';
 
-// Dev Firebase
-const config = {
-  apiKey: "AIzaSyDhSSM3kQmouCbLmrg1GK-qSMZKuLFAW1k",
-  authDomain: "test-60f3a.firebaseapp.com",
-  databaseURL: "https://test-60f3a.firebaseio.com",
-  projectId: "test-60f3a",
-  storageBucket: "test-60f3a.appspot.com",
-  messagingSenderId: "997935352484"
-};
+const DEBUG = ( document.location.search.length );
+
 
 // Production
-// const config = {
-//   apiKey: "AIzaSyALThai8CYhmSG91fsN499Kl-Mf1vP-_pY",
-//   authDomain: "resistance-1ec7a.firebaseapp.com",
-//   databaseURL: "https://resistance-1ec7a.firebaseio.com",
-//   projectId: "resistance-1ec7a",
-//   storageBucket: "resistance-1ec7a.appspot.com",
-//   messagingSenderId: "383282710233"
-// }
+let config = {
+  apiKey: "AIzaSyALThai8CYhmSG91fsN499Kl-Mf1vP-_pY",
+  authDomain: "resistance-1ec7a.firebaseapp.com",
+  databaseURL: "https://resistance-1ec7a.firebaseio.com",
+  projectId: "resistance-1ec7a",
+  storageBucket: "resistance-1ec7a.appspot.com",
+  messagingSenderId: "383282710233"
+};
+
+if( DEBUG ) {
+  config = {
+    apiKey: "AIzaSyDhSSM3kQmouCbLmrg1GK-qSMZKuLFAW1k",
+    authDomain: "test-60f3a.firebaseapp.com",
+    databaseURL: "https://test-60f3a.firebaseio.com",
+    projectId: "test-60f3a",
+    storageBucket: "test-60f3a.appspot.com",
+    messagingSenderId: "997935352484"
+  };
+}
+
 
 firebase.initializeApp(config);
 
@@ -144,17 +149,8 @@ stateRef.on("value", function (snap) {
     // There is no game state.
 
     $('#game').show();
-    const $gameList = $('#game_list').empty();
-    GAMES.forEach(game => {
-      const str = `<button class="pure-button button-large game-option" id="${game.id}">${game.label}</button>`;
-      $gameList.append(str);
-    });
+    renderGamesList();
 
-    renderSelections();
-
-    $('.game-option').click(event => {
-      selectGameType(event.target.id);
-    });
 
     if (players.length >= MIN_PLAYERS) {
       $('#start').prop("disabled", false);
@@ -163,6 +159,25 @@ stateRef.on("value", function (snap) {
     }
   }
 });
+
+function renderGamesList () {
+  const $gameList = $('#game_list').empty();
+  GAMES.forEach(game => {
+    const str = `<button class="pure-button button-large game-option" id="${game.id}">${game.label}</button>`;
+    const $el = $(str);
+    if( game.minPlayers > players.length ) {
+      $el.prop("disabled", true)
+        .append(` [${players.length}/${game.minPlayers}]`);
+    }
+    $gameList.append($el);
+  });
+
+  $('.game-option').click(event => {
+    selectGameType(event.target.id);
+  });
+
+  renderSelections();
+}
 
 listRef.on("value", function (snap) {
   const playerCount = snap.numChildren();
@@ -180,6 +195,7 @@ listRef.on("value", function (snap) {
   });
 
   $('.peopleCount').html(playerCount);
+  renderGamesList();
   renderGameStartButton();
 });
 
@@ -187,8 +203,6 @@ function selectGameType(button_id){
   // If it's primary, ignore
   // if it's secondary, make primary
   // If it's not, make it secondary
-
-  console.log("game type?", button_id)
 
   const user = firebase.auth().currentUser;
 
