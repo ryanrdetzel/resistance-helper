@@ -122,7 +122,7 @@ stateRef.on("value", function (snap) {
     const visible = role.getVisibleRoles(state.players);
     const $visible = $('#visible_list').empty();
     visible.forEach(r=> {
-      const $el = $(`<li>${r.mask || r.player.card} (${r.player.name})</li>`);
+      const $el = $(`<li>${r.mask ? r.mask  + "?" : r.player.card} (${r.player.name})</li>`);
       if(! r.mask ) {
         $el.addClass(r.isSpy ? 'spy-player' : 'resistance-player');
       }
@@ -135,10 +135,8 @@ stateRef.on("value", function (snap) {
     const invisible = role.getInvisibleRoles(state.players);
     const $invisible = $('#invisible_list').empty();
     invisible.forEach(r => {
-      const $el = $(`<li>${r.mask || r.player.card}</li>`);
-      if(! r.mask ) {
-        $el.addClass(r.isSpy ? 'spy-player' : 'resistance-player');
-      }
+      const $el = $(`<li>${r.player.card}</li>`);
+      $el.addClass(r.isSpy ? 'spy-player' : 'resistance-player');
       $invisible.append($el);
     });
     if (!invisible.length) {

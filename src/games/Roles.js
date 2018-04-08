@@ -1,19 +1,19 @@
 
-export const GOOD = 'Good';
+export const GOOD = 'Resistance';
 export const SPY = 'Spy';
 
-export const GOOD_DEFECTOR = 'Good Defector';
+export const GOOD_DEFECTOR = 'Resist. Defector';
 export const SPY_DEFECTOR = 'Spy Defector';
 
-export const GOOD_REVERSER = 'Good Reverser';
+export const GOOD_REVERSER = 'Resist. Reverser';
 export const SPY_REVERSER = 'Spy Reverser';
 
 export const GOOD_COMMANDER = 'Commander';
 export const SPY_ASSASSIN = 'Assassin';
 
-export const GOOD_CHIEF = 'Good Chief';
-export const GOOD_HUNTER = 'Good Hunter';
-export const GOOD_DUMMY = 'Good Dummy';
+export const GOOD_CHIEF = 'Resist. Chief';
+export const GOOD_HUNTER = 'Resist. Hunter';
+export const GOOD_DUMMY = 'Resist. Dummy';
 export const GOOD_COORDINATOR = 'Coordinator';
 export const GOOD_PRETENDER = 'Pretender';
 export const SPY_CHIEF = 'Spy Chief';
@@ -88,17 +88,29 @@ export class Role {
     const visible = playerList.filter(r =>
       (r.player.uid !== this.player.uid) && (this.canSee.indexOf(r.player.card) !== -1)
     );
-    return visible.sort(sortCard);
+    return visible.sort(sortVisible);
   }
   getInvisibleRoles(players) {
     const playerList = Object.keys(players).map(uid => new Role(players[uid]));
     const invisible = playerList.filter(r => (r.player.uid !== this.player.uid) && (this.canSee.indexOf(r.player.card) === -1))
-    return invisible.sort(sortCard);
+    return invisible.sort(sortInvisible);
   }
 }
 
-function sortCard (a, b) {
+function sortVisible (a, b) {
   const acard = a.mask || a.player.card;
   const bcard = b.mask || b.player.card;
   return acard.localeCompare(bcard);
+}
+
+function sortInvisible (a, b) {
+  console.log(a, b);
+  if (a.isSpy === b.isSpy){
+    return a.player.card.localeCompare(b.player.card);
+  }
+  else if (a.isSpy){
+    return -1;
+  } else {
+    return 1;
+  }
 }
