@@ -68,6 +68,10 @@ export class Role {
         break;
 
       case SPY_REVERSER:
+        this.isSpy = true;
+        this.canSee = [SPY];
+        break;
+
       case SPY_DEFECTOR:
         this.isSpy = true;
         this.canSee = [];
