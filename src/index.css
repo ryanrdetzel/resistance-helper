@@ -90,6 +90,7 @@ li {
     padding: 4px 8px;
     display: inline-block;
     margin: 2px;
+    font-size: 14px;
     min-width: 100px;
     border-radius: 8px;
     background: rgba(0, 0, 0, 0.1);
@@ -106,11 +107,12 @@ li {
     display: inline-block;
     border-radius: 4px;
     margin: 2px;
-    min-width: 180px;
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
     outline: none;
 }
-
+.game-option {
+    min-width: 180px;
+}
 .cards-section {
     margin: 8px 0 2px;
     font-size: 14px;
