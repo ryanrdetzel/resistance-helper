@@ -83,7 +83,6 @@ export default class Role {
       case GOOD:
       case GOOD_DEFECTOR:
       case GOOD_REVERSER:
-      case GOOD_COMMANDER:
       case GOOD_HUNTER:
       case GOOD_DUMMY:
       case GOOD_COORDINATOR:
@@ -91,6 +90,12 @@ export default class Role {
           card: card,
           isSpy: false,
           canSee: []
+        };
+      case GOOD_COMMANDER:
+        return {
+          card: card,
+          isSpy: false,
+          canSee: [ SPY, SPY_ASSASSIN ] // todo implement custom visibility based only on allegiance
         };
       case GOOD_PRETENDER:
         return {
@@ -106,11 +111,17 @@ export default class Role {
           canSee: [GOOD_CHIEF, GOOD_COORDINATOR]
         };
       case SPY:
-      case SPY_ASSASSIN:
       case SPY_CHIEF:
       case SPY_HUNTER:
         return {
           card: card,
+          isSpy: true,
+          canSee: [SPY, SPY_DEFECTOR, SPY_ASSASSIN, SPY_CHIEF, SPY_HUNTER, GOOD_PRETENDER, SPY_DEEP_AGENT]
+        };
+      case SPY_ASSASSIN:
+        return {
+          card: card,
+          mask: SPY,
           isSpy: true,
           canSee: [SPY, SPY_DEFECTOR, SPY_ASSASSIN, SPY_CHIEF, SPY_HUNTER, GOOD_PRETENDER, SPY_DEEP_AGENT]
         };

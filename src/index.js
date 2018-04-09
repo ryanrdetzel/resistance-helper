@@ -138,9 +138,11 @@ stateRef.on("value", function (snap) {
     const $visible = $('#visible_list').empty();
     visible.forEach(r=> {
       const $el = $(`<li>${r.mask ? r.mask : r.player.card} (${r.player.name})</li>`);
-      if(! r.mask ) {
-        $el.addClass(r.isSpy ? 'spy-player' : 'resistance-player');
+      let isSpy = r.isSpy;
+      if (r.mask) {
+        isSpy = Role.fromCard(r.mask).isSpy;
       }
+      $el.addClass(isSpy ? 'spy-player' : 'resistance-player');
       $visible.append($el);
     });
     if (!visible.length) {
