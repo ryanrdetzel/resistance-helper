@@ -137,7 +137,7 @@ stateRef.on("value", function (snap) {
     const visible = role.getVisibleRoles(state.players);
     const $visible = $('#visible_list').empty();
     visible.forEach(r=> {
-      const $el = $(`<li>${r.mask ? r.mask  + "?" : r.player.card} (${r.player.name})</li>`);
+      const $el = $(`<li>${r.mask ? r.mask : r.player.card} (${r.player.name})</li>`);
       if(! r.mask ) {
         $el.addClass(r.isSpy ? 'spy-player' : 'resistance-player');
       }
@@ -364,6 +364,7 @@ function onGameType (type) {
     $('#game-custom').click();
     return;
   }
+
   const gameState = GameSetup(type, players);
   stateRef.set(gameState);
   $('#start').prop("disabled", true);

@@ -1,6 +1,4 @@
 
-import DefectorGame from "./DefectorGame";
-
 export const GOOD = 'Resistance';
 export const SPY = 'Spy';
 
