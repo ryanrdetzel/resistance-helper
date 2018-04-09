@@ -11,11 +11,13 @@ import HunterCoordinatorGame from './HunterCoordinatorGame';
 import HunterDeepAgentGame from './HunterDeepAgentGame';
 import HunterPretenderGame from './HunterPretenderGame';
 import HunterBlameGame from './HunterBlameGame';
+import CustomGame from './CustomGame';
 
 
 export const GAMES = [
   NormalGame, DefectorGame, ReverserGame, AssassinGame, InquisitorGame, TrapperGame,
-  HunterGame, HunterDummyGame, HunterCoordinatorGame, HunterDeepAgentGame, HunterPretenderGame, HunterBlameGame
+  HunterGame, HunterDummyGame, HunterCoordinatorGame, HunterDeepAgentGame, HunterPretenderGame, HunterBlameGame,
+  CustomGame
 ];
 
 const gamesById = {};
@@ -23,12 +25,21 @@ GAMES.forEach(game => gamesById[game.id]= game);
 
 export default function GameSetup (type, presence) {
 
-  console.log("GAMES?", gamesById);
-  const game = gamesById[type];
+  let game;
+  if (typeof type === "string") {
+    game = gamesById[type];
+  }
+  else {
+    // allow passing in game object
+    game = type;
+    type = game.id;
+  }
 
-  if (!game){
+
+  if (!(game && game.cards)){
     throw new Error(`Unknown Game: ${type}`)
   }
+
   const players = deal(game.cards, presence);
 
   /* Who goes first? */

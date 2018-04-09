@@ -76,6 +76,7 @@ ul {
     max-width: 60%;
     margin: 0 auto;
     display: block !important;
+    min-height: 1.5em;
 }
 
 .centered {
@@ -100,13 +101,19 @@ li {
     max-width: 600px;
 }
 
-.game-option {
+.game-option, .custom-card {
     font-size: 14px;
     display: inline-block;
     border-radius: 4px;
     margin: 2px;
     min-width: 180px;
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    outline: none;
+}
+
+.cards-section {
+    margin: 8px 0 2px;
+    font-size: 14px;
 }
 .button-success:before {
     content: '(1st) ';

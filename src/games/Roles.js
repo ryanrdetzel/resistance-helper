@@ -1,4 +1,6 @@
 
+import DefectorGame from "./DefectorGame";
+
 export const GOOD = 'Resistance';
 export const SPY = 'Spy';
 
@@ -22,15 +24,64 @@ export const SPY_DEEP_AGENT = 'Deep Agent';
 
 export const OBSERVER = 'Observer';
 
-export default function (player) {
-  return new Role(player);
-}
+export const ALL_CARDS = [
+  GOOD,
+  GOOD_DEFECTOR,
+  GOOD_REVERSER,
+  GOOD_COMMANDER,
+  GOOD_CHIEF,
+  GOOD_HUNTER,
+  GOOD_DUMMY,
+  GOOD_COORDINATOR,
+  GOOD_PRETENDER,
+  SPY,
+  SPY_DEFECTOR,
+  SPY_REVERSER,
+  SPY_ASSASSIN,
+  SPY_CHIEF,
+  SPY_HUNTER,
+  SPY_DEEP_AGENT
+];
 
-export class Role {
-  constructor(player) {
+export const CARD_GROUPS = [
+  {
+    label: "Base",
+    cards: [GOOD, SPY]
+  },
+  {
+    label: "Reverser",
+    cards: [GOOD_REVERSER, SPY_REVERSER]
+  },
+  {
+    label: "Defector",
+    cards: [GOOD_DEFECTOR, SPY_DEFECTOR]
+  },
+  {
+    label: "Assassin",
+    cards: [GOOD_COMMANDER, SPY_ASSASSIN]
+  },
+  {
+    label: "Hunter",
+    cards: [GOOD_CHIEF, GOOD_HUNTER, GOOD_COORDINATOR, GOOD_DUMMY, SPY_CHIEF, SPY_HUNTER]
+  },
+  {
+    label: "Deep Agent",
+    cards: [GOOD_PRETENDER, SPY_DEEP_AGENT]
+  }
+];
+
+export default class Role {
+  constructor(player = {}) {
     this.player = player;
+    const r = Role.fromCard(player.card);
+    this.card = player.card;
+    this.isSpy = r.isSpy;
+    this.canSee = r.canSee;
+    this.mask = r.mask;
+  }
 
-    switch (player.card) {
+  static fromCard (card) {
+    switch (card) {
       case GOOD:
       case GOOD_DEFECTOR:
       case GOOD_REVERSER:
@@ -38,50 +89,58 @@ export class Role {
       case GOOD_HUNTER:
       case GOOD_DUMMY:
       case GOOD_COORDINATOR:
-        this.isSpy = false;
-        this.canSee = [];
-        break;
-
+        return {
+          card: card,
+          isSpy: false,
+          canSee: []
+        };
       case GOOD_PRETENDER:
-        this.isSpy = false;
-        this.canSee = [];
-        this.mask = SPY_DEEP_AGENT;
-        break;
-
+        return {
+          card: card,
+          isSpy: false,
+          canSee: [],
+          mask: SPY_DEEP_AGENT
+        };
       case GOOD_CHIEF:
-        this.isSpy = false;
-        this.canSee = [GOOD_CHIEF, GOOD_COORDINATOR];
-        break;
-
+        return {
+          card: card,
+          isSpy: false,
+          canSee: [GOOD_CHIEF, GOOD_COORDINATOR]
+        };
       case SPY:
       case SPY_ASSASSIN:
       case SPY_CHIEF:
       case SPY_HUNTER:
-        this.isSpy = true;
-        this.canSee = [SPY, SPY_DEFECTOR, SPY_ASSASSIN, SPY_CHIEF, SPY_HUNTER, GOOD_PRETENDER, SPY_DEEP_AGENT];
-        break;
-
+        return {
+          card: card,
+          isSpy: true,
+          canSee: [SPY, SPY_DEFECTOR, SPY_ASSASSIN, SPY_CHIEF, SPY_HUNTER, GOOD_PRETENDER, SPY_DEEP_AGENT]
+        };
       case SPY_DEEP_AGENT:
-        this.isSpy = true;
-        this.mask = SPY_DEEP_AGENT;
-        this.canSee = [];
-        break;
-
+        return {
+          card: card,
+          isSpy: true,
+          canSee: [],
+          mask: SPY_DEEP_AGENT,
+        };
       case SPY_REVERSER:
-        this.isSpy = true;
-        this.canSee = [SPY];
-        break;
-
+        return {
+          card: card,
+          isSpy: true,
+          canSee: [SPY]
+        };
       case SPY_DEFECTOR:
-        this.isSpy = true;
-        this.canSee = [];
-        break;
-
+        return {
+          card: card,
+          isSpy: true,
+          canSee: []
+        };
       case OBSERVER:
-        this.isSpy = null;
-        this.canSee = [];
-        break;
-
+        return {
+          card: card,
+          isSpy: null,
+          canSee: ALL_CARDS
+        };
       default:
         throw new Error(`UNKNOWN ROLE: ${player.card}`);
     }
@@ -97,20 +156,23 @@ export class Role {
   getInvisibleRoles(players) {
     const playerList = Object.keys(players).map(uid => new Role(players[uid]));
     const invisible = playerList.filter(r => (r.player.uid !== this.player.uid) && (this.canSee.indexOf(r.player.card) === -1))
-    return invisible.sort(sortInvisible);
+    return invisible.sort(sortByTeamType);
+  }
+
+  static getAllRoles () {
+    return ALL_CARDS.map(card => Role.fromCard(card));
   }
 }
 
 function sortVisible (a, b) {
-  const acard = a.mask || a.player.card;
-  const bcard = b.mask || b.player.card;
+  const acard = a.mask || a.card;
+  const bcard = b.mask || b.card;
   return acard.localeCompare(bcard);
 }
 
-function sortInvisible (a, b) {
-  console.log(a, b);
+export function sortByTeamType (a, b) {
   if (a.isSpy === b.isSpy){
-    return a.player.card.localeCompare(b.player.card);
+    return a.card.localeCompare(b.card);
   }
   else if (a.isSpy){
     return -1;

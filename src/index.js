@@ -1,7 +1,8 @@
 import Auth from './auth/TwitterAuth';
 import GameSetup, { GAMES } from './games/Game';
 import Voting from './voting/RankedChoiceVoting';
-import Role, { OBSERVER } from './games/Roles';
+import Role, { CARD_GROUPS } from './games/Roles';
+import CustomGame from "./games/CustomGame";
 
 const DEBUG = ( document.location.search.length );
 
@@ -71,6 +72,20 @@ $(function () {
   $('#join').click(function () {
     auth.signIn();
   });
+
+
+  $('#start_custom').click(e => {
+    e.preventDefault();
+
+    const custom = {
+      ...CustomGame,
+      cards: chosenCards
+    };
+    const gameState = GameSetup(custom, players);
+    stateRef.set(gameState);
+  });
+
+  renderCustomOptions();
 });
 
 
@@ -100,7 +115,7 @@ stateRef.on("value", function (snap) {
 
     // Check these are valid.
 
-    const role = Role(self);
+    const role = new Role(self);
 
     $('#game_type').text(state.game.label);
     $('.playerCount').html( Object.keys(state.players).length );
@@ -147,8 +162,14 @@ stateRef.on("value", function (snap) {
     // There is no game state.
 
     $('#game').show();
-    renderGamesList();
 
+    $('#game_custom').hide();
+    $('#game_list').show();
+
+    $('#start').show();
+    $('#start_custom').hide();
+
+    renderGamesList();
 
     if (players.length >= MIN_PLAYERS) {
       $('#start').prop("disabled", false);
@@ -159,6 +180,10 @@ stateRef.on("value", function (snap) {
 });
 
 function renderGamesList () {
+
+  if( $('#game_custom').is(":visible") )
+    return;
+
   const $gameList = $('#game_list').empty();
   GAMES.forEach(game => {
     const str = `<button class="pure-button button-large game-option" id="${game.id}">${game.label}</button>`;
@@ -170,12 +195,76 @@ function renderGamesList () {
     $gameList.append($el);
   });
 
+  $('#game-custom').click( e => {
+    e.preventDefault();
+    $('#game_custom').show();
+    $('#game_list').hide();
+    $('#start').hide();
+    $('#start_custom').show();
+    renderCustomOptions();
+  });
+
   $('.game-option').click(event => {
     selectGameType(event.target.id);
   });
 
+  $gameList.show();
+
+
   renderSelections();
 }
+
+
+
+function renderRolePill (role){
+  const $el = $(`<button>${role.card}</button>`);
+  $el.addClass('custom-card');
+  $el.addClass(role.isSpy ? 'spy-player' : 'resistance-player');
+  return $el;
+}
+
+const chosenCards = [];
+function renderCustomOptions (){
+  const $available = $('#cards_available').empty();
+  CARD_GROUPS.forEach(group => {
+    $(`<div class='cards-section'>${group.label}</div>`).appendTo($available);
+
+    const $ul = $("<ul />").appendTo($available);
+    $available.append().append($ul);
+    group.cards.map(card => Role.fromCard(card)).forEach(role => {
+      const $el = renderRolePill(role);
+      $el.addClass('custom-card');
+      $ul.append($el);
+    });
+  });
+
+  const $chosen = $('#cards_chosen').empty();
+  chosenCards.map(card => Role.fromCard(card)).forEach( role => {
+    const $el = $(`<button>${role.card}</button>`);
+    $el.addClass('custom-card');
+    $el.addClass(role.isSpy ? 'spy-player' : 'resistance-player');
+    $chosen.append($el);
+  });
+
+  $available.find('.custom-card').click(e => {
+    e.preventDefault();
+    const card = $(e.target).text();
+    chosenCards.push(card);
+    renderCustomOptions();
+  });
+
+  $chosen.find('.custom-card').click(e => {
+    e.preventDefault();
+    const card = $(e.target).text();
+    const i = chosenCards.indexOf(card);
+    chosenCards.splice(i, 1);
+    renderCustomOptions();
+  });
+
+  $('#start_custom').prop('disabled', chosenCards.length !== players.length);
+  $('#start_custom_count').text( `${chosenCards.length} / ${players.length}`);
+}
+
 
 listRef.on("value", function (snap) {
   const playerCount = snap.numChildren();
@@ -195,6 +284,7 @@ listRef.on("value", function (snap) {
   $('.peopleCount').html(playerCount);
   renderGamesList();
   renderGameStartButton();
+  renderCustomOptions();
 });
 
 function selectGameType(button_id){
@@ -269,6 +359,11 @@ function resolveGameType () {
 }
 
 function onGameType (type) {
+
+  if (type == 'game-custom'){
+    $('#game-custom').click();
+    return;
+  }
   const gameState = GameSetup(type, players);
   stateRef.set(gameState);
   $('#start').prop("disabled", true);

@@ -29,11 +29,32 @@
     </div>
 
     <div class="pure-u-1">
+
         <div class="centered" id="game_list"></div>
+
+        <div id="game_custom" style="display: none">
+            <div class="pure-u-1 pure-u-md-1-1 centered">
+                <strong>Available Roles</strong>
+                <div class="centered" id="cards_available"></div>
+            </div>
+
+            <div class="pure-u-1 pure-u-md-1-1 centered">
+                <strong>Selected Roles</strong>
+                <ul class="centered" id="cards_chosen">
+                </ul>
+            </div>
+        </div>
     </div>
     <div class="pure-u-1 pure-u-md-1-1">
         <form class="pure-form" onsubmit="return false;">
-            <button class="pure-button pure-input-1" id="start">Start Game</button>
+
+            <button class="pure-button pure-input-1" id="start">
+                Start Game
+            </button>
+
+            <button class="pure-button pure-input-1" id="start_custom" style="display: none;">
+                Start Game <span id="start_custom_count"></span>
+            </button>
         </form>
     </div>
 </div>
