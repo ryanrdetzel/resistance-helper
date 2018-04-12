@@ -1,0 +1,132 @@
+body {
+    font-family: Georgia, Times, "Times New Roman", serif;
+    font-size: 18px;
+}
+
+strong {
+    line-height: 1.5em;
+}
+
+#lobby, #game, #results {
+    display: none;
+}
+
+#newGame, #start {
+    /* position: absolute;
+    bottom: 0; */
+    margin: 20px 0;
+}
+
+.spy {
+    text-align: center;
+    background: #c94c4c;
+    color: white;
+    font-weight: bold;
+    padding: 20px 0;
+}
+
+.resistance {
+    text-align: center;
+    background: #034f84;
+    color: white;
+    padding: 20px 0;
+    font-weight: bold;
+}
+
+.spy-player {
+    background: rgba(201, 76, 76, 0.35);
+}
+
+.resistance-player {
+    background: rgba(3, 79, 132, 0.25);
+}
+
+.observer {
+    text-align: center;
+    background: #888888;
+    color: white;
+    padding: 20px 0;
+    font-weight: bold;
+}
+
+.first {
+    padding: 8px 0;
+    background: #eeeeee;
+    text-align: center;
+}
+
+.player-count {
+    padding: 20px 0;
+    background: #deeaee;
+    text-align: center;
+}
+
+#playerList {
+    font-size: 14px;
+}
+
+#playerList li {
+    background: lightgreen;
+}
+
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    display: block !important;
+    min-height: 1.5em;
+}
+
+.centered {
+    text-align: center;
+    padding:10px 0;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+li {
+    padding: 4px 8px;
+    display: inline-block;
+    margin: 2px;
+    font-size: 14px;
+    min-width: 100px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+#game_list {
+    text-align: center;
+    padding: 10px 10px;
+    max-width: 600px;
+}
+
+.game-option, .custom-card {
+    font-size: 14px;
+    display: inline-block;
+    border-radius: 4px;
+    margin: 2px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    outline: none;
+}
+.game-option {
+    min-width: 180px;
+}
+.cards-section {
+    margin: 8px 0 2px;
+    font-size: 14px;
+}
+.button-success:before {
+    content: '(1st) ';
+}
+.button-success {
+    color: white;
+    background: rgb(28, 184, 65); /* this is a green */
+}
+.button-secondary:before {
+    content: '(2nd) ';
+}
+.button-secondary {
+    color: white;
+    background: rgb(66, 184, 221); /* this is a light blue */
+}
