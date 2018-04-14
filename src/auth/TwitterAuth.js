@@ -1,8 +1,8 @@
-/* global firebase:false */
 
 class TwitterAuth {
 
-  constructor ({ onAuth, onError }) {
+  constructor ({firebase, onAuth, onError }) {
+    this.firebase = firebase;
     this.callbacks = {
       onAuth,
       onError
@@ -11,13 +11,13 @@ class TwitterAuth {
   }
 
   signIn() {
-    const provider = new firebase.auth.TwitterAuthProvider();
-    firebase.auth().signInWithRedirect(provider);
+    const provider = new this.firebase.auth.TwitterAuthProvider();
+    this.firebase.auth().signInWithRedirect(provider);
   }
 
   addListeners() {
-    firebase.auth().getRedirectResult().catch(this.callbacks.onError);
-    firebase.auth().onAuthStateChanged( user => {
+    this.firebase.auth().getRedirectResult().catch(this.callbacks.onError);
+    this.firebase.auth().onAuthStateChanged( user => {
       let userState = null;
       if (user) {
         userState = {

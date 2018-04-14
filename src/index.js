@@ -1,102 +1,130 @@
 import Auth from './auth/TwitterAuth';
 import GameSetup, { GAMES } from './games/Game';
 import Voting from './voting/RankedChoiceVoting';
-import Role, { CARD_GROUPS } from './games/Roles';
+import Role, { OBSERVER, CARD_GROUPS } from './games/Roles';
 import CustomGame from "./games/CustomGame";
 
-const DEBUG = ( document.location.search.length );
+import $ from 'jquery';
 
+import * as firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/database';
+
+const DEBUG = ( document.location.search === '?debug' );
 
 // Production
 let config = {
-  apiKey: "AIzaSyALThai8CYhmSG91fsN499Kl-Mf1vP-_pY",
-  authDomain: "resistance-1ec7a.firebaseapp.com",
-  databaseURL: "https://resistance-1ec7a.firebaseio.com",
-  projectId: "resistance-1ec7a",
-  storageBucket: "resistance-1ec7a.appspot.com",
-  messagingSenderId: "383282710233"
+  apiKey: 'AIzaSyALThai8CYhmSG91fsN499Kl-Mf1vP-_pY',
+  authDomain: 'resistance-1ec7a.firebaseapp.com',
+  databaseURL: 'https://resistance-1ec7a.firebaseio.com',
+  projectId: 'resistance-1ec7a',
+  storageBucket: 'resistance-1ec7a.appspot.com',
+  messagingSenderId: '383282710233'
 };
 
 if( DEBUG ) {
   config = {
-    apiKey: "AIzaSyDhSSM3kQmouCbLmrg1GK-qSMZKuLFAW1k",
-    authDomain: "test-60f3a.firebaseapp.com",
-    databaseURL: "https://test-60f3a.firebaseio.com",
-    projectId: "test-60f3a",
-    storageBucket: "test-60f3a.appspot.com",
-    messagingSenderId: "997935352484"
+    apiKey: 'AIzaSyDhSSM3kQmouCbLmrg1GK-qSMZKuLFAW1k',
+    authDomain: 'test-60f3a.firebaseapp.com',
+    databaseURL: 'https://test-60f3a.firebaseio.com',
+    projectId: 'test-60f3a',
+    storageBucket: 'test-60f3a.appspot.com',
+    messagingSenderId: '997935352484'
   };
 }
 
-
 firebase.initializeApp(config);
 
-var MIN_PLAYERS = 2;
-
-var players = [];
-var selectedGameTypePrimary = '';
-var selectedGameTypeSecondary = '';
+const appState = {
+  players: {},
+  selectedGameTypePrimary: '',
+  selectedGameTypeSecondary: '',
+};
 
 const listRef = firebase.database().ref("presense");
 const stateRef = firebase.database().ref("state");
 const ballotsRef = firebase.database().ref('ballots');
 
 
-const auth = new Auth({
-  onAuth(user){
-    if (user) {
-      const userRef = firebase.database().ref("presense/" + user.uid);
-      userRef.update(user);
-      userRef.onDisconnect().remove();
-      $('#lobby').hide();
-    }
-    else {
-      $('#lobby').show();
-    }
-  },
-  onError(error) {
-    console.log("Auth ERROR: " , error.message);
-  }
-});
+let ui;
 
 $(function () {
-  $('#newGame').click(function () {
+  ui = {
+    lobby : $('#lobby'),
+    join: $('#join'),
+    newGame: $('#newGame'),
+    start: $('#start'),
+    start_custom: $('#start_custom'),
+    game_list: $('#game_list'),
+    game_custom: $('#game_custom'),
+    game: $('#game'),
+    game_type: $('#game_type'),
+    results: $('#results'),
+    first_player: $('#first_player'),
+    team: $('#team'),
+    playerCount: $('.playerCount'),
+    peopleCount: $('.peopleCount'),
+    visible_list: $('#visible_list'),
+    cards_available: $('#cards_available'),
+    cards_chosen: $('#cards_chosen'),
+    start_custom_count: $('#start_custom_count'),
+    playerList: $('#playerList'),
+  };
+
+  ui.newGame.click(function () {
     stateRef.remove();
     renderGameStartButton();
   });
 
-  $('#start').click(function () {
+  ui.start.click(function () {
     startGame();
   });
 
-  $('#join').click(function () {
+  ui.join.click(function () {
     auth.signIn();
   });
 
-
-  $('#start_custom').click(e => {
+  ui.start_custom.click(e => {
     e.preventDefault();
 
     const custom = {
       ...CustomGame,
       cards: chosenCards
     };
-    const gameState = GameSetup(custom, players);
+    const gameState = GameSetup(custom, appState.players);
     stateRef.set(gameState);
+  });
+
+  const auth = new Auth({
+    firebase,
+    onAuth(user){
+      if (user) {
+        const userRef = firebase.database().ref('presense/' + user.uid);
+        userRef.update(user);
+        userRef.onDisconnect().remove();
+        ui.lobby.hide();
+      }
+      else {
+        ui.lobby.show();
+      }
+    },
+    onError() {
+      // console.error("Auth ERROR: " , error.message);
+    }
   });
 
   renderCustomOptions();
 });
 
 
-stateRef.on("value", function (snap) {
+stateRef.on('value', function (snap) {
   const state = snap.val();
   const user = firebase.auth().currentUser;
 
-  $('#game').hide();
-  $('#results').hide();
+  ui.game.hide();
+  ui.results.hide();
 
-  if (!user){
+  if (!user) {
     return;
   }
 
@@ -108,48 +136,48 @@ stateRef.on("value", function (snap) {
 
     let self = state.players[myuid];
 
-    if (! self){
+    if (!self) {
       // logged in after the game
-      self = { ...user, card: OBSERVER };
+      self = {...user, card: OBSERVER};
     }
 
     // Check these are valid.
 
     const role = new Role(self);
 
-    $('#game_type').text(state.game.label);
-    $('.playerCount').html( Object.keys(state.players).length );
+    ui.game_type.text(state.game.label);
+    ui.playerCount.html(Object.keys(state.players).length);
 
-    $('#first_player').text(state.first.name);
-    $('#team')
+    ui.first_player.text(appState.first.name);
+    ui.team
       .text(self.card)
       .removeClass('resistance').removeClass('spy').removeClass('observer');
 
     if (role.isSpy) {
-      $('#team').addClass('spy');
+      ui.team.addClass('spy');
     }
-    else if (role.isSpy === false ) {
-      $('#team').addClass('resistance');
+    else if (role.isSpy === false) {
+      ui.team.addClass('resistance');
     }
     else {
-      $('#team').addClass('observer');
+      ui.team.addClass('observer');
     }
-    const visible = role.getVisibleRoles(state.players);
-    const $visible = $('#visible_list').empty();
-    visible.forEach(r=> {
+    const visible = role.getVisibleRoles(appState.players);
+    ui.visible_list.empty();
+    visible.forEach(r => {
       const $el = $(`<li>${r.mask ? r.mask : r.player.card} (${r.player.name})</li>`);
       let isSpy = r.isSpy;
       if (r.mask) {
         isSpy = Role.fromCard(r.mask).isSpy;
       }
       $el.addClass(isSpy ? 'spy-player' : 'resistance-player');
-      $visible.append($el);
+      ui.visible_list.append($el);
     });
     if (!visible.length) {
-      $visible.text('(none)')
+      ui.visible_list.text('(none)');
     }
 
-    const invisible = role.getInvisibleRoles(state.players);
+    const invisible = role.getInvisibleRoles(appState.players);
     const $invisible = $('#invisible_list').empty();
     invisible.forEach(r => {
       const $el = $(`<li>${r.player.card}</li>`);
@@ -157,44 +185,39 @@ stateRef.on("value", function (snap) {
       $invisible.append($el);
     });
     if (!invisible.length) {
-      $invisible.text('(none)')
+      $invisible.text('(none)');
     }
 
   } else {
     // There is no game state.
 
-    $('#game').show();
+    ui.game.show();
 
-    $('#game_custom').hide();
-    $('#game_list').show();
+    ui.game_custom.hide();
+    ui.game_list.show();
 
-    $('#start').show();
-    $('#start_custom').hide();
 
     renderGamesList();
 
-    if (players.length >= MIN_PLAYERS) {
-      $('#start').prop("disabled", false);
-    } else {
-      $('#start').prop("disabled", true);
-    }
+    ui.start_custom.hide();
+    ui.start.show().prop("disabled", appState.players.length >= 5);
   }
 });
 
 function renderGamesList () {
 
-  if( $('#game_custom').is(":visible") )
+  if( ui.game_custom.is(":visible") )
     return;
 
-  const $gameList = $('#game_list').empty();
+  ui.game_list.empty();
   GAMES.forEach(game => {
     const str = `<button class="pure-button button-large game-option" id="${game.id}">${game.label}</button>`;
     const $el = $(str);
-    if( game.minPlayers > players.length ) {
+    if( game.minPlayers > appState.players.length ) {
       $el.prop("disabled", true)
-        .append(` [${players.length}/${game.minPlayers}]`);
+        .append(` [${appState.players.length}/${game.minPlayers}]`);
     }
-    $gameList.append($el);
+    ui.game_list.append($el);
   });
 
   $('#game-custom').click( e => {
@@ -210,8 +233,7 @@ function renderGamesList () {
     selectGameType(event.target.id);
   });
 
-  $gameList.show();
-
+  ui.game_list.show();
 
   renderSelections();
 }
@@ -227,12 +249,10 @@ function renderRolePill (role){
 
 const chosenCards = [];
 function renderCustomOptions (){
-  const $available = $('#cards_available').empty();
+  ui.cards_available.empty();
   CARD_GROUPS.forEach(group => {
-    $(`<div class='cards-section'>${group.label}</div>`).appendTo($available);
-
-    const $ul = $("<ul />").appendTo($available);
-    $available.append().append($ul);
+    const $ul = $("<ul />").appendTo(ui.cards_available);
+    ui.cards_available.append($ul);
     group.cards.map(card => Role.fromCard(card)).forEach(role => {
       const $el = renderRolePill(role);
       $el.addClass('custom-card');
@@ -240,22 +260,22 @@ function renderCustomOptions (){
     });
   });
 
-  const $chosen = $('#cards_chosen').empty();
+  ui.cards_chosen.empty();
   chosenCards.map(card => Role.fromCard(card)).forEach( role => {
     const $el = $(`<button>${role.card}</button>`);
     $el.addClass('custom-card');
     $el.addClass(role.isSpy ? 'spy-player' : 'resistance-player');
-    $chosen.append($el);
+    ui.cards_chosen.append($el);
   });
 
-  $available.find('.custom-card').click(e => {
+  ui.cards_available.find('.custom-card').click(e => {
     e.preventDefault();
     const card = $(e.target).text();
     chosenCards.push(card);
     renderCustomOptions();
   });
 
-  $chosen.find('.custom-card').click(e => {
+  ui.cards_chosen.find('.custom-card').click(e => {
     e.preventDefault();
     const card = $(e.target).text();
     const i = chosenCards.indexOf(card);
@@ -263,27 +283,28 @@ function renderCustomOptions (){
     renderCustomOptions();
   });
 
-  $('#start_custom').prop('disabled', chosenCards.length !== players.length);
-  $('#start_custom_count').text( `${chosenCards.length} / ${players.length}`);
+  ui.start_custom.prop('disabled', chosenCards.length !== appState.players.length);
+  ui.start_custom_count.text( `${chosenCards.length} / ${appState.players.length}`);
 }
 
 
 listRef.on("value", function (snap) {
   const playerCount = snap.numChildren();
 
-  $('#playerList').empty();
+  ui.playerList.empty();
 
   const playerList = snap.val();
-  players = Object.keys(playerList).map(uid => playerList[uid]);
+  appState.players = Object.keys(playerList).map(uid => playerList[uid]);
 
-  const playerNames = players.map(p => p.name).sort();
+  const playerNames = appState.players.map(p => p.name).sort();
 
   playerNames.forEach(name => {
     const str = `<li>${name}</li>`;
-    $('#playerList').append(str);
+    ui.playerList.append(str);
   });
 
-  $('.peopleCount').html(playerCount);
+  ui.peopleCount.text(playerCount);
+
   renderGamesList();
   renderGameStartButton();
   renderCustomOptions();
@@ -297,19 +318,19 @@ function selectGameType(button_id){
   const user = firebase.auth().currentUser;
 
   let tmp;
-  if (button_id === selectedGameTypePrimary){
+  if (button_id === appState.selectedGameTypePrimary){
     // Swap
-    tmp = selectedGameTypeSecondary;
-    selectedGameTypeSecondary = selectedGameTypePrimary;
-    selectedGameTypeSecondary = tmp;
-  }else if (button_id === selectedGameTypeSecondary){
+    tmp = appState.selectedGameTypeSecondary;
+    appState.selectedGameTypeSecondary = appState.selectedGameTypePrimary;
+    appState.selectedGameTypeSecondary = tmp;
+  }else if (button_id === appState.selectedGameTypeSecondary){
     // Swap
-    tmp = selectedGameTypePrimary;
-    selectedGameTypePrimary = selectedGameTypeSecondary;
-    selectedGameTypeSecondary = tmp;
+    tmp = appState.selectedGameTypePrimary;
+    appState.selectedGameTypePrimary = appState.selectedGameTypeSecondary;
+    appState.selectedGameTypeSecondary = tmp;
   }else{
-    if (selectedGameTypePrimary === "")  selectedGameTypePrimary = button_id;
-    else  selectedGameTypeSecondary = button_id;
+    if (appState.selectedGameTypePrimary === "")  appState.selectedGameTypePrimary = button_id;
+    else  appState.selectedGameTypeSecondary = button_id;
   }
 
   renderSelections();
@@ -317,8 +338,8 @@ function selectGameType(button_id){
   if (user && user.uid) {
     const ballotRef = firebase.database().ref(`ballots/${user.uid}`);
     ballotRef.update({
-      primary: selectedGameTypePrimary,
-      secondary: selectedGameTypeSecondary
+      primary: appState.selectedGameTypePrimary,
+      secondary: appState.selectedGameTypeSecondary
     });
     ballotRef.onDisconnect().remove();
   }
@@ -326,8 +347,8 @@ function selectGameType(button_id){
 
 function renderSelections(){
   $('.game-option').removeClass('button-secondary').removeClass('button-success');
-  if (selectedGameTypePrimary !== "") $('#' + selectedGameTypePrimary).addClass('button-success');
-  if (selectedGameTypeSecondary !== "") $('#' + selectedGameTypeSecondary).addClass('button-secondary');
+  if (appState.selectedGameTypePrimary !== "") $('#' + appState.selectedGameTypePrimary).addClass('button-success');
+  if (appState.selectedGameTypeSecondary !== "") $('#' + appState.selectedGameTypeSecondary).addClass('button-secondary');
 }
 
 let ballots = [];
@@ -338,7 +359,7 @@ ballotsRef.on('value', snapshot => {
 });
 
 function renderGameStartButton () {
-  const hasPlayers = players.length >= MIN_PLAYERS;
+  const hasPlayers = appState.players.length >= 2;
   const hasBallot = ballots.length > 0;
   $('#start').prop("disabled", !(hasPlayers && hasBallot));
 }
@@ -362,12 +383,12 @@ function resolveGameType () {
 
 function onGameType (type) {
 
-  if (type == 'game-custom'){
-    $('#game-custom').click();
+  if (type === 'game-custom'){
+    ui.game_custom.click();
     return;
   }
 
-  const gameState = GameSetup(type, players);
+  const gameState = GameSetup(type, appState.players);
   stateRef.set(gameState);
-  $('#start').prop("disabled", true);
+  ui.start.prop("disabled", true);
 }
