@@ -15,8 +15,10 @@ import CustomGame from './CustomGame';
 
 
 export const GAMES = [
-  NormalGame, DefectorGame, ReverserGame, AssassinGame, InquisitorGame, TrapperGame,
-  HunterGame, HunterDummyGame, HunterCoordinatorGame, HunterDeepAgentGame, HunterPretenderGame, HunterBlameGame,
+  NormalGame, DefectorGame, ReverserGame,
+  AssassinGame, InquisitorGame, TrapperGame,
+  HunterGame, HunterDummyGame, HunterCoordinatorGame,
+  HunterDeepAgentGame, HunterPretenderGame, HunterBlameGame,
   CustomGame
 ];
 
@@ -24,9 +26,8 @@ const gamesById = {};
 GAMES.forEach(game => gamesById[game.id]= game);
 
 export default function GameSetup (type, presence) {
-
   let game;
-  if (typeof type === "string") {
+  if (typeof type === 'string') {
     game = gamesById[type];
   }
   else {
@@ -35,16 +36,16 @@ export default function GameSetup (type, presence) {
     type = game.id;
   }
 
-
   if (!(game && game.cards)){
-    throw new Error(`Unknown Game: ${type}`)
+    throw new Error(`Unknown Game: ${type}`);
   }
 
   const players = deal(game.cards, presence);
 
   /* Who goes first? */
-  const firstIndex = Math.floor( Math.random() * presence.length);
-  const first = presence[firstIndex];
+  const playerList = Object.keys(players).map(uid => players[uid]);
+  const firstIndex = Math.floor( Math.random() * playerList.length);
+  const first = playerList[firstIndex];
 
   return {
     game:  {
@@ -53,7 +54,7 @@ export default function GameSetup (type, presence) {
     },
     players,
     first
-  }
+  };
 }
 
 function deal (cards, presence) {

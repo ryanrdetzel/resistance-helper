@@ -43,32 +43,33 @@ export const ALL_CARDS = [
 
 export const CARD_GROUPS = [
   {
-    label: "Base",
+    label: 'Base',
     cards: [GOOD, SPY]
   },
   {
-    label: "Reverser",
+    label: 'Reverser',
     cards: [GOOD_REVERSER, SPY_REVERSER]
   },
   {
-    label: "Defector",
+    label: 'Defector',
     cards: [GOOD_DEFECTOR, SPY_DEFECTOR]
   },
   {
-    label: "Assassin",
+    label: 'Assassin',
     cards: [GOOD_COMMANDER, SPY_ASSASSIN]
   },
   {
-    label: "Hunter",
+    label: 'Hunter',
     cards: [GOOD_CHIEF, GOOD_HUNTER, GOOD_COORDINATOR, GOOD_DUMMY, SPY_CHIEF, SPY_HUNTER]
   },
   {
-    label: "Deep Agent",
+    label: 'Deep Agent',
     cards: [GOOD_PRETENDER, SPY_DEEP_AGENT]
   }
 ];
 
 export default class Role {
+
   constructor(player = {}) {
     this.player = player;
     const r = Role.fromCard(player.card);
@@ -151,7 +152,7 @@ export default class Role {
           canSee: ALL_CARDS
         };
       default:
-        throw new Error(`UNKNOWN ROLE: ${player.card}`);
+        throw new Error(`UNKNOWN ROLE: ${card}`);
     }
   }
 
