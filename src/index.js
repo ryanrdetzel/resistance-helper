@@ -1,6 +1,7 @@
 import Auth from './auth/TwitterAuth';
 import GameSetup from './games/Game';
 import CustomGame from './games/CustomGame';
+import NormalGame from './games/NormalGame';
 import Voting from './voting/RankedChoiceVoting';
 import { render, initDom } from './views';
 
@@ -54,15 +55,11 @@ $(function () {
 
 appState.resetGame = function () {
   gameStateRef.remove();
-  render(appState);
+  appState.setAllReady(false);
 };
 
 appState.signIn = function () {
   auth.signIn();
-};
-
-appState.startGame = function () {
-  resolveVoting();
 };
 
 /* Auth */
@@ -90,6 +87,14 @@ const presenceRef = firebase.database().ref('presence');
 presenceRef.on('value', function (snap) {
   appState.presence = snap.val();
   appState.presenceCount = Object.keys(appState.presence).length;
+  appState.readyCount = Object.keys(appState.presence)
+    .map(uid => appState.presence[uid])
+    .filter(p => p.isReady)
+    .length;
+
+  const uid = appState.currentPlayer.uid;
+  appState.currentPlayer = appState.presence[uid];
+
   render(appState);
 });
 
@@ -97,6 +102,29 @@ appState.addPresence = function (user) {
   const userRef = firebase.database().ref('presence/' + user.uid);
   userRef.update(user);
   return userRef;
+};
+
+appState.setAllReady = function (val) {
+  Object.keys(appState.presence)
+    .forEach(uid => {
+      appState.presence[uid].isReady = !!val;
+    });
+  presenceRef.update(appState.presence);
+  render(appState);
+};
+
+appState.setUserReady = function (val) {
+
+  const user = appState.currentPlayer;
+  if (!user)
+    return;
+
+  if (val && appState.readyCount + 1 >= appState.presenceCount){
+    const gameType = resolveVoting();
+    appState.startGame(gameType);
+  }
+  user.isReady = !!val;
+  firebase.database().ref('presence/' + user.uid).update(user);
 };
 
 /* Voting */
@@ -127,22 +155,24 @@ function resolveVoting () {
     const ballot = ballots[uid];
     return [ballot.primary, ballot.secondary];
   });
+  if (!ballotsList.length)
+    return null;
   const results = Voting.results({ballots: ballotsList, tiebreak: true});
-  onGameType(results.winners[0]);
+  return results.winners[0];
 }
 
 /* Game Setup */
 const gameStateRef = firebase.database().ref('state');
 gameStateRef.on('value', function (snap) {
   appState.gameState = snap.val();
-  appState.currentPlayer = firebase.auth().currentUser;
   render(appState);
 });
 
-function onGameType (type) {
+appState.startGame = function (gameType) {
+  const type = gameType || NormalGame.id;
   const gameState = GameSetup(type, appState.presence);
   gameStateRef.set(gameState);
-}
+};
 
 /* Custom Game */
 const customGameRef = firebase.database().ref('custom');

@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import Role, {CARD_GROUPS, OBSERVER} from '../games/Roles';
-import {GAMES} from "../games/Game";
+import {GAMES} from '../games/Game';
 
 export function render(app) {
   renderLobby(app);
@@ -15,7 +15,7 @@ export function initDom(app) {
     $lobby: $('#lobby'),
     $join: $('#join'),
     $newGame: $('#newGame'),
-    $start: $('#start'),
+    $ready_btn: $('#ready_btn'),
     $start_custom: $('#start_custom'),
     $game_list: $('#game_list'),
     $game: $('#game'),
@@ -37,7 +37,7 @@ export function initDom(app) {
 
   ui.$newGame.click(app.resetGame);
 
-  ui.$start.click(app.startGame);
+  ui.$ready_btn.click(app.setUserReady);
 
   ui.$join.click(app.signIn);
 
@@ -117,8 +117,8 @@ function renderGameState(app) {
 }
 
 function renderLobby(app) {
-  const { currentPlayer, gameState, presenceCount, ui } = app;
-  const { $lobby, $game, $start} = ui;
+  const { currentPlayer, gameState, ui } = app;
+  const { $lobby, $game} = ui;
 
   $lobby.hide();
   $game.hide();
@@ -135,7 +135,6 @@ function renderLobby(app) {
   renderGamesList(app);
 
   $game.show();
-  $start.show().prop('disabled', presenceCount >= 5);
 }
 
 function renderGamesList (app) {
@@ -150,10 +149,14 @@ function renderGamesList (app) {
 
   GAMES.forEach(game => {
 
-    const str = `<button class="pure-button button-large game-option" id="${game.id}">${game.label}</button>`;
+    const str = `<button class='pure-button button-large game-option' id='${game.id}'>${game.label}</button>`;
     const $el = $(str);
     if( game.minPlayers > presenceCount ) {
-      $el.prop('disabled', true).append(` [${presenceCount}/${game.minPlayers}]`);
+      $el.prop('disabled', true).append(`*${game.minPlayers}`);
+    }
+
+    if( $el.text().length > 18 ){
+      $el.addClass('smaller');
     }
 
     if( game.id === selected.primary )
@@ -161,6 +164,8 @@ function renderGamesList (app) {
 
     if( game.id === selected.secondary )
       $el.addClass('button-secondary');
+
+    $el.prop('disabled', selected.isReady);
 
     $game_list.append($el);
   });
@@ -216,6 +221,7 @@ function renderCustomOptions(app) {
     $cards_available.append($ul);
     group.cards.map(card => Role.fromCard(card)).forEach(role => {
       const $el = renderRolePill(role);
+      $el.addClass('pure-button');
       $el.addClass('custom-card');
       $ul.append($el);
     });
@@ -254,32 +260,36 @@ function renderRolePill(role) {
 }
 
 function renderGameStartButton (app) {
-  const { custom, ballotCount, presenceCount, ui } = app;
-  const { $start } = ui;
+  const { custom, currentPlayer, readyCount, presenceCount, ui } = app;
+  const { $ready_btn } = ui;
 
-
-  const hasPlayers = presenceCount >= 2;
-  const hasBallots = ballotCount > 0;
-
-  if( custom.isCustom ){
-    $start.hide();
+  if( custom.isCustom || ! currentPlayer){
+    $ready_btn.hide();
     return;
   }
 
-  $start.show();
-  $start.prop('disabled', !(hasPlayers && hasBallots));
+  $ready_btn.show();
+  $ready_btn.prop('disabled', currentPlayer.isReady);
+
+  if (!currentPlayer.isReady) {
+    $ready_btn.text('Ready');
+  }
+  else {
+    $ready_btn.text(`${readyCount} / ${presenceCount} ready...`);
+
+  }
 }
 
 function renderPlayerList (app) {
-  const { presence, ui} = app;
+  const { presence, presenceCount, ui} = app;
   const {$playerList, $peopleCount} = ui;
-  const presenceNames = Object.keys(presence).map(uid => presence[uid].name);
+  const presenceList = Object.keys(presence).map(uid => presence[uid]);
 
   $playerList.empty();
-  presenceNames.forEach(name => {
-    const str = `<li>${name}</li>`;
+  presenceList.forEach(person => {
+    const str = `<li>${person.name} ${person.isReady ? '✔' : ''}</li>`;
     $playerList.append(str);
   });
 
-  $peopleCount.text(presenceNames.length);
+  $peopleCount.text(presenceCount);
 }

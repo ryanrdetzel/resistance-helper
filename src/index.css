@@ -102,15 +102,26 @@ li {
 }
 
 .game-option, .custom-card {
-    font-size: 14px;
+    font-size: 16px;
+    line-height: 16px;
     display: inline-block;
     border-radius: 4px;
     margin: 2px;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
     outline: none;
+    min-width: 170px;
 }
+.smaller {
+    font-size: 12px;
+}
+#cards_available ul {
+    margin-top: 10px;
+}
+
+.custom-card {
+    padding: 6px;
+}
+
 .game-option {
-    min-width: 180px;
 }
 .cards-section {
     margin: 8px 0 2px;
