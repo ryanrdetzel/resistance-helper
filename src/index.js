@@ -3,7 +3,7 @@ import GameSetup from './games/Game';
 import CustomGame from './games/CustomGame';
 import NormalGame from './games/NormalGame';
 import Voting from './voting/RankedChoiceVoting';
-import { render, initDom } from './views';
+import { render, initDom } from './views/View';
 
 import $ from 'jquery';
 
