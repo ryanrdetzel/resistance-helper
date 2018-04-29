@@ -113,8 +113,13 @@ appState.setAllReady = function (val) {
   render(appState);
 };
 
-appState.setUserReady = function (val) {
+appState.forceStart = function () {
+  appState.setAllReady(true);
+  const gameType = resolveVoting();
+  appState.startGame(gameType);
+};
 
+appState.setUserReady = function (val) {
   const user = appState.currentPlayer;
   if (!user)
     return;
@@ -171,6 +176,7 @@ gameStateRef.on('value', function (snap) {
 appState.startGame = function (gameType) {
   const type = gameType || NormalGame.id;
   const gameState = GameSetup(type, appState.presence);
+  console.log("GAME STATE?", gameState)
   gameStateRef.set(gameState);
 };
 

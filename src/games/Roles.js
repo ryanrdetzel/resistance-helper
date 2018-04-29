@@ -1,46 +1,47 @@
 
+// Base Module
 export const GOOD = 'Resistance';
 export const SPY = 'Spy';
 
+// Defector Module
 export const GOOD_DEFECTOR = 'Resist. Defector';
 export const SPY_DEFECTOR = 'Spy Defector';
 
+// Reverser Module
 export const GOOD_REVERSER = 'Resist. Reverser';
 export const SPY_REVERSER = 'Spy Reverser';
 
-export const GOOD_COMMANDER = 'Commander';
-export const SPY_ASSASSIN = 'Assassin';
+// Assassin Module
+export const ASSASSIN        = 'Assassin';        // hunts COMMANDER
+export const COMMANDER       = 'Commander';       // knows all spies
+export const FALSE_COMMANDER = 'False Commander'; // looks like COMMANDER
+export const BODYGUARD       = 'Body Guard';      // knows COMMANDER
+export const DEEP_COVER      = 'Deep Cover';      // normal spy, and invisible to COMMANDER
 
+// Hunter Module
 export const GOOD_CHIEF = 'Resist. Chief';
-export const GOOD_HUNTER = 'Resist. Hunter';
-export const GOOD_DUMMY = 'Resist. Dummy';
-export const GOOD_COORDINATOR = 'Coordinator';
-export const GOOD_PRETENDER = 'Pretender';
 export const SPY_CHIEF = 'Spy Chief';
+export const GOOD_HUNTER = 'Resist. Hunter';
 export const SPY_HUNTER = 'Spy Hunter';
-export const SPY_DEEP_AGENT = 'Deep Agent';
+export const GOOD_DUMMY = 'Resist. Dummy';  // can pretend to be chief
+export const GOOD_COORDINATOR = 'Coordinator'; // known to good chief
+export const GOOD_PRETENDER = 'Pretender';  // appears as fake deep agent
 
+// Misc Mechanics
+
+export const DEEP_AGENT = 'Deep Agent'; // doesn't know other spies, but seen by them
+export const BLIND_SPY = 'Blind Spy';   // doesn't know other spies, visa v
+
+// Late player
 export const OBSERVER = 'Observer';
 
-export const ALL_CARDS = [
-  GOOD,
-  GOOD_DEFECTOR,
-  GOOD_REVERSER,
-  GOOD_COMMANDER,
-  GOOD_CHIEF,
-  GOOD_HUNTER,
-  GOOD_DUMMY,
-  GOOD_COORDINATOR,
-  GOOD_PRETENDER,
-  SPY,
-  SPY_DEFECTOR,
-  SPY_REVERSER,
-  SPY_ASSASSIN,
-  SPY_CHIEF,
-  SPY_HUNTER,
-  SPY_DEEP_AGENT
-];
+/*
+Bodyguard: during the beginning of the game, the bodyguard sees who the commander is (commander raises his thumb while the bodyguard opens his eyes)
 
+False commander: Raises his thumb when the bodyguard looks for the commander, so the bodyguard does not know which is the real one.
+
+Deep cover: Does not raise his thumb when the commander sees the spies.
+ */
 export const CARD_GROUPS = [
   {
     label: 'Base',
@@ -56,7 +57,7 @@ export const CARD_GROUPS = [
   },
   {
     label: 'Assassin',
-    cards: [GOOD_COMMANDER, SPY_ASSASSIN]
+    cards: [COMMANDER, FALSE_COMMANDER, BODYGUARD, ASSASSIN, DEEP_COVER]
   },
   {
     label: 'Hunter',
@@ -64,120 +65,169 @@ export const CARD_GROUPS = [
   },
   {
     label: 'Deep Agent',
-    cards: [GOOD_PRETENDER, SPY_DEEP_AGENT]
+    cards: [GOOD_PRETENDER, DEEP_AGENT]
+  },
+  {
+    label: 'Misc',
+    cards: [BLIND_SPY]
   }
 ];
 
 export default class Role {
 
-  constructor(player = {}) {
-    this.player = player;
-    const r = Role.fromCard(player.card);
-    this.card = player.card;
-    this.isSpy = r.isSpy;
-    this.canSee = r.canSee;
-    this.mask = r.mask;
-  }
 
   static fromCard (card) {
-    switch (card) {
+    return new Role({ card });
+  }
+
+  constructor(player = {}) {
+    this.card = player.card;
+    this.isSpy = false;
+    this.asVisibleCard = () => {};
+
+    switch (player.card) {
       case GOOD:
       case GOOD_DEFECTOR:
       case GOOD_REVERSER:
       case GOOD_HUNTER:
       case GOOD_DUMMY:
       case GOOD_COORDINATOR:
-        return {
-          card: card,
-          isSpy: false,
-          canSee: []
-        };
-      case GOOD_COMMANDER:
-        return {
-          card: card,
-          isSpy: false,
-          canSee: [ SPY, SPY_ASSASSIN ] // todo implement custom visibility based only on allegiance
-        };
       case GOOD_PRETENDER:
-        return {
-          card: card,
-          isSpy: false,
-          canSee: [],
-          mask: SPY_DEEP_AGENT
-        };
+        break;
+
       case GOOD_CHIEF:
-        return {
-          card: card,
-          isSpy: false,
-          canSee: [GOOD_CHIEF, GOOD_COORDINATOR]
+        this.asVisibleCard = card => {
+          switch (card) {
+            case GOOD_CHIEF:
+            case GOOD_COORDINATOR:
+              return card;
+            default:
+              return;
+          }
         };
+        break;
+
+
+      case COMMANDER:
+        this.asVisibleCard = card => {
+          switch (card) {
+            case SPY:
+            case ASSASSIN:
+            case SPY_CHIEF:
+            case SPY_HUNTER:
+            case DEEP_AGENT:
+            case SPY_REVERSER:
+            case BLIND_SPY:
+              return SPY;
+            case SPY_DEFECTOR:
+            case DEEP_COVER:
+            default:
+              return;
+          }
+        };
+        break;
+
+      case BODYGUARD:
+        this.asVisibleCard = card => {
+          switch (card) {
+            case COMMANDER:
+            case FALSE_COMMANDER:
+              return COMMANDER;
+            default:
+              return;
+          }
+        };
+        break;
+
+      // blind spy visibility
+      case SPY_DEFECTOR:
+      case BLIND_SPY:
+      case DEEP_AGENT:
+        this.isSpy = true;
+        break;
+
+      // normal spy visibility
       case SPY:
       case SPY_CHIEF:
       case SPY_HUNTER:
-        return {
-          card: card,
-          isSpy: true,
-          canSee: [SPY, SPY_DEFECTOR, SPY_ASSASSIN, SPY_CHIEF, SPY_HUNTER, GOOD_PRETENDER, SPY_DEEP_AGENT]
-        };
-      case SPY_ASSASSIN:
-        return {
-          card: card,
-          mask: SPY,
-          isSpy: true,
-          canSee: [SPY, SPY_DEFECTOR, SPY_ASSASSIN, SPY_CHIEF, SPY_HUNTER, GOOD_PRETENDER, SPY_DEEP_AGENT]
-        };
-      case SPY_DEEP_AGENT:
-        return {
-          card: card,
-          isSpy: true,
-          canSee: [],
-          mask: SPY_DEEP_AGENT,
-        };
+      case ASSASSIN:
+      case FALSE_COMMANDER:
       case SPY_REVERSER:
-        return {
-          card: card,
-          isSpy: true,
-          canSee: [SPY]
+      case DEEP_COVER:
+        this.isSpy = true;
+        this.asVisibleCard = card => {
+          switch (card) {
+            case SPY:
+            case SPY_CHIEF:
+            case SPY_DEFECTOR:
+            case DEEP_AGENT:
+              return card;
+
+            case GOOD_PRETENDER:
+              return DEEP_AGENT;
+
+            case ASSASSIN:
+            case DEEP_COVER:
+            case SPY_HUNTER:
+              return SPY;
+
+            case BLIND_SPY:
+            case SPY_REVERSER:
+            default:
+              return;
+          }
         };
-      case SPY_DEFECTOR:
-        return {
-          card: card,
-          isSpy: true,
-          canSee: []
-        };
+        break;
+
       case OBSERVER:
-        return {
-          card: card,
-          isSpy: null,
-          canSee: ALL_CARDS
+        this.isSpy = null;
+        this.asVisibleCard = card => {
+          return card;
         };
+        break;
+
       default:
-        throw new Error(`UNKNOWN ROLE: ${card}`);
+        throw new Error(`UNKNOWN ROLE: ${this.card}`);
     }
   }
 
-  getVisibleRoles(players) {
-    const playerList = Object.keys(players).map(uid => new Role(players[uid]));
-    const visible = playerList.filter(r =>
-      (r.player.uid !== this.player.uid) && (this.canSee.indexOf(r.player.card) !== -1)
-    );
-    return visible.sort(sortVisible);
-  }
-  getInvisibleRoles(players) {
-    const playerList = Object.keys(players).map(uid => new Role(players[uid]));
-    const invisible = playerList.filter(r => (r.player.uid !== this.player.uid) && (this.canSee.indexOf(r.player.card) === -1))
-    return invisible.sort(sortByTeamType);
+  isPossibleImposter(cards) {
+    switch (this.card) {
+      case COMMANDER:
+        return (cards.indexOf(FALSE_COMMANDER) >= 0);
+      case FALSE_COMMANDER:
+        return true;
+
+      case DEEP_AGENT:
+        return (cards.indexOf(GOOD_PRETENDER) >= 0);
+      case GOOD_PRETENDER:
+        return true;
+
+      default:
+        return false;
+    }
   }
 
-  static getAllRoles () {
-    return ALL_CARDS.map(card => Role.fromCard(card));
-  }
-}
+  static getVisibleRoles(uid, gameState) {
+    const { players } = gameState;
+    const viewer = Role.fromCard(players[uid].card);
+    const playerList = Object.keys(players).map(uid => players[uid]);
 
-function sortVisible (a, b) {
-  const acard = a.mask || a.card;
-  const bcard = b.mask || b.card;
-  return acard.localeCompare(bcard);
+    const visible = playerList.map(player => {
+      const visibleCard = viewer.asVisibleCard(player.card, gameState.game.cards);
+      const role = Role.fromCard(visibleCard || player.card);
+      return {
+        ...player,
+        visible: !! visibleCard,
+        role
+      };
+    });
+
+    return visible.filter(player =>
+      (player.uid !== uid)
+    ).sort(sortByTeamType);
+  }
+
 }
 
 export function sortByTeamType (a, b) {

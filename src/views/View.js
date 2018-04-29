@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import Role, {CARD_GROUPS, OBSERVER} from '../games/Roles';
+import Role, {CARD_GROUPS, OBSERVER, sortByTeamType} from '../games/Roles';
 import {GAMES} from '../games/Game';
 
 export function render(app) {
@@ -8,6 +8,7 @@ export function render(app) {
   renderCustomOptions(app);
   renderPlayerList(app);
   renderGameStartButton(app);
+  renderRoleVisibility(app);
 }
 
 export function initDom(app) {
@@ -27,7 +28,6 @@ export function initDom(app) {
     $playerCount: $('.playerCount'),
     $peopleCount: $('.peopleCount'),
     $visible_list: $('#visible_list'),
-    $invisible_list: $('#invisible_list'),
     $cards_available: $('#cards_available'),
     $cards_chosen: $('#cards_chosen'),
     $start_custom_count: $('#start_custom_count'),
@@ -35,9 +35,18 @@ export function initDom(app) {
   };
 
 
-  ui.$newGame.click(app.resetGame);
+  ui.$newGame.click(e => {
+    e.preventDefault();
+    app.resetGame();
+  });
 
-  ui.$ready_btn.click(app.setUserReady);
+  ui.$ready_btn.click( e => {
+    if (e.ctrlKey || e.shiftKey || e.metaKey) {
+      app.forceStart();
+      return;
+    }
+    app.setUserReady
+  });
 
   ui.$join.click(app.signIn);
 
@@ -50,14 +59,14 @@ export function initDom(app) {
 function renderGameState(app) {
   const {currentPlayer, gameState, ui} = app;
   const { $game_type, $playerCount, $first_player,
-    $results, $team, $invisible_list, $visible_list} = ui;
+    $results, $team, $visible_list} = ui;
 
   if (!currentPlayer || !gameState) {
     $results.hide();
     return;
   }
 
-  const { players } = gameState;
+  const { players, game } = gameState;
 
   let self = players[currentPlayer.uid];
 
@@ -86,31 +95,37 @@ function renderGameState(app) {
   else {
     $team.addClass('observer');
   }
-  const visible = role.getVisibleRoles(players);
-  $visible_list.empty();
-  visible.forEach(r => {
-    const $el = $(`<li>${r.mask ? r.mask : r.player.card} (${r.player.name})</li>`);
-    let isSpy = r.isSpy;
-    if (r.mask) {
-      isSpy = Role.fromCard(r.mask).isSpy;
-    }
-    $el.addClass(isSpy ? 'spy-player' : 'resistance-player');
-    $visible_list.append($el);
-  });
-  if (!visible.length) {
-    $visible_list.text('(none)');
-  }
 
-  // render not visible other players
-  const invisible = role.getInvisibleRoles(players);
-  $invisible_list.empty();
-  invisible.forEach(r => {
-    const $el = $(`<li>${r.player.card}</li>`);
-    $el.addClass(r.isSpy ? 'spy-player' : 'resistance-player');
-    $invisible_list.append($el);
+  const visibleRoles = Role.getVisibleRoles(currentPlayer.uid, gameState);
+
+  $visible_list.empty();
+
+  const $own_role = $('#own_role').empty();
+  const $el = $(`<li><b>${role.card}</b></li>`);
+  $el.addClass(role.isSpy ? 'spy-player' : 'resistance-player');
+  $own_role.append($el);
+
+  visibleRoles.forEach(player => {
+    const role = player.role;
+    let $el;
+    if (player.visible){
+      $el = $(`<li><b>${player.name}</b> &mdash; ${role.card}</li>`);
+      if (role.isPossibleImposter(game.cards)) {
+        $el.addClass('possible-imposter-player');
+        $el.append('?');
+      }
+      else if( role.isSpy ){
+        $el.addClass('spy-player');
+
+      } else {
+        $el.addClass('resistance-player');
+      }
+      $visible_list.append($el);
+    }
   });
-  if (!invisible.length) {
-    $invisible_list.text('(none)');
+
+  if (! $visible_list.children().length) {
+    $visible_list.text('(none)');
   }
 
   $results.show();
@@ -292,4 +307,65 @@ function renderPlayerList (app) {
   });
 
   $peopleCount.text(presenceCount);
+}
+
+
+function renderRoleVisibility (app){
+  const $vis = $('#visibility').empty();
+
+  if (! app.gameState)
+    return;
+
+  const roles = sortedUniqueRoles(app.gameState.game.cards);
+
+  roles.forEach(perspective => {
+    const $row = $('<div class="matrix-row" />');
+
+    roles.forEach(actualRole => {
+      const viewableCard = perspective.asVisibleCard(actualRole.card);
+      const visibleRole = Role.fromCard(viewableCard||actualRole.card);
+
+      if (!viewableCard) {
+        return;
+      }
+
+      const $el = $('<div class="matrix-cell matrix-role"></div>');
+
+      if (viewableCard === actualRole.card) {
+        $el.text( actualRole.card )
+      }
+      else {
+        $el.text(`(${actualRole.card})`);
+      }
+
+      $el.addClass(visibleRole.isSpy ? 'spy-player' : 'resistance-player');
+
+      if (visibleRole.isSpy && !actualRole.isSpy){
+        $el.addClass('resistence-imposter');
+      }
+      if (!visibleRole.isSpy && actualRole.isSpy){
+        $el.addClass('spy-imposter');
+      }
+
+      $row.append($el);
+    });
+
+    if ($row.children().length === 0) {
+      $row.append(`<div class="matrix-cell matrix-role">-</div>`);
+    }
+    $row.prepend(`<div class="matrix-cell matrix-label">${perspective.card}</div>`);
+    $row.appendTo($vis);
+
+  });
+}
+
+function sortedUniqueRoles (cards){
+  const seen = {};
+  const unique = cards.filter(card => {
+    if (seen[card] )
+      return false;
+    return seen[card] = true;
+  });
+
+  return unique.map(c => Role.fromCard(c)).sort(sortByTeamType)
 }

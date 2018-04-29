@@ -48,10 +48,7 @@ export default function GameSetup (type, presence) {
   const first = playerList[firstIndex];
 
   return {
-    game:  {
-      type,
-      label: game.label
-    },
+    game: game,
     players,
     first
   };

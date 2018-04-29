@@ -33,14 +33,6 @@ strong {
     font-weight: bold;
 }
 
-.spy-player {
-    background: rgba(201, 76, 76, 0.35);
-}
-
-.resistance-player {
-    background: rgba(3, 79, 132, 0.25);
-}
-
 .observer {
     text-align: center;
     background: #888888;
@@ -49,10 +41,11 @@ strong {
     font-weight: bold;
 }
 
-.first {
-    padding: 8px 0;
-    background: #eeeeee;
-    text-align: center;
+.wide-button {
+    width: 400px;
+    padding: 8px;
+    display: inline-block;
+    margin: 0 auto;
 }
 
 .player-count {
@@ -80,7 +73,7 @@ ul {
 
 .centered {
     text-align: center;
-    padding:10px 0;
+    padding: 10px 0;
     margin-right: auto;
     margin-left: auto;
 }
@@ -140,4 +133,56 @@ li {
 .button-secondary {
     color: white;
     background: rgb(66, 184, 221); /* this is a light blue */
+}
+
+.matrix {
+    display: inline-block;
+    clear: both;
+}
+
+.matrix-cell {
+    display: inline-block;
+    margin: 1px;
+    padding: 4px;
+    width: 140px;
+    font-size: 12px;
+    text-align: center;
+ }
+
+.matrix-label {
+    font-weight: bold;
+    text-align: right;
+    margin-right: 4px;
+    background-color: #eeeeee;
+}
+
+.matrix-header {
+    font-style: italic;
+}
+
+.matrix-role {
+    background-color: #eeeeee;
+}
+
+.matrix-row {
+    overflow: auto;
+    text-align: left;
+}
+
+
+.spy-player {
+    background: rgba(201, 76, 76, 0.35);
+}
+
+.resistance-player {
+    background: rgba(3, 79, 132, 0.25);
+}
+.possible-imposter-player {
+    background: #cbcbcb;
+}
+.resistence-imposter {
+    color: #034f84;
+}
+.spy-imposter {
+    color: #c94c4c;
 }
