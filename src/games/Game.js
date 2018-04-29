@@ -1,24 +1,23 @@
 
-import NormalGame from './NormalGame';
-import DefectorGame from './DefectorGame';
-import ReverserGame from './ReverserGame';
 import AssassinGame from './AssassinGame';
-import InquisitorGame from './InquisitorGame';
-import TrapperGame from './TrapperGame';
-import HunterGame from './HunterGame';
-import HunterDummyGame from './HunterDummyGame';
-import HunterCoordinatorGame from './HunterCoordinatorGame';
-import HunterDeepAgentGame from './HunterDeepAgentGame';
-import HunterPretenderGame from './HunterPretenderGame';
-import HunterBlameGame from './HunterBlameGame';
 import CustomGame from './CustomGame';
-
+import DefectorGame from './DefectorGame';
+import HunterGame from './HunterGame';
+import InquisitorGame from './InquisitorGame';
+import NormalGame from './NormalGame';
+import PretenderGame from './PretenderGame';
+import ReverserGame from './ReverserGame';
+import TrapperGame from './TrapperGame';
 
 export const GAMES = [
-  NormalGame, DefectorGame, ReverserGame,
-  AssassinGame, InquisitorGame, TrapperGame,
-  HunterGame, HunterDummyGame, HunterCoordinatorGame,
-  HunterDeepAgentGame, HunterPretenderGame, HunterBlameGame,
+  NormalGame,
+  AssassinGame,
+  ReverserGame,
+  TrapperGame,
+  InquisitorGame,
+  DefectorGame,
+  PretenderGame,
+  HunterGame,
   CustomGame
 ];
 

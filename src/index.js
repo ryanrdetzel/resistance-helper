@@ -119,10 +119,14 @@ appState.forceStart = function () {
   appState.startGame(gameType);
 };
 
-appState.setUserReady = function (val) {
+appState.toggleUserReady = function (val) {
   const user = appState.currentPlayer;
   if (!user)
     return;
+
+  if (val === undefined) {
+    val = !user.isReady;
+  }
 
   if (val && appState.readyCount + 1 >= appState.presenceCount){
     const gameType = resolveVoting();

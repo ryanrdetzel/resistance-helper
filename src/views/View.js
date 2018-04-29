@@ -45,7 +45,7 @@ export function initDom(app) {
       app.forceStart();
       return;
     }
-    app.setUserReady
+    app.toggleUserReady();
   });
 
   ui.$join.click(app.signIn);
@@ -112,7 +112,6 @@ function renderGameState(app) {
       $el = $(`<li><b>${player.name}</b> &mdash; ${role.card}</li>`);
       if (role.isPossibleImposter(game.cards)) {
         $el.addClass('possible-imposter-player');
-        $el.append('?');
       }
       else if( role.isSpy ){
         $el.addClass('spy-player');
@@ -234,7 +233,7 @@ function renderCustomOptions(app) {
   CARD_GROUPS.forEach(group => {
     const $ul = $('<ul />').appendTo($cards_available);
     $cards_available.append($ul);
-    group.cards.map(card => Role.fromCard(card)).forEach(role => {
+    group.map(card => Role.fromCard(card)).forEach(role => {
       const $el = renderRolePill(role);
       $el.addClass('pure-button');
       $el.addClass('custom-card');
@@ -284,13 +283,13 @@ function renderGameStartButton (app) {
   }
 
   $ready_btn.show();
-  $ready_btn.prop('disabled', currentPlayer.isReady);
+  // $ready_btn.prop('disabled', currentPlayer.isReady);
 
   if (!currentPlayer.isReady) {
     $ready_btn.text('Ready');
   }
   else {
-    $ready_btn.text(`${readyCount} / ${presenceCount} ready...`);
+    $ready_btn.text(`Waiting for others... (${readyCount}/${presenceCount})`);
 
   }
 }
@@ -312,8 +311,8 @@ function renderPlayerList (app) {
 
 function renderRoleVisibility (app){
   const $vis = $('#visibility').empty();
-
-  if (! app.gameState)
+  const { gameState } = app;
+  if (! gameState)
     return;
 
   const roles = sortedUniqueRoles(app.gameState.game.cards);
@@ -332,7 +331,7 @@ function renderRoleVisibility (app){
       const $el = $('<div class="matrix-cell matrix-role"></div>');
 
       if (viewableCard === actualRole.card) {
-        $el.text( actualRole.card )
+        $el.text( actualRole.card );
       }
       else {
         $el.text(`(${actualRole.card})`);
@@ -340,18 +339,22 @@ function renderRoleVisibility (app){
 
       $el.addClass(visibleRole.isSpy ? 'spy-player' : 'resistance-player');
 
-      if (visibleRole.isSpy && !actualRole.isSpy){
-        $el.addClass('resistence-imposter');
-      }
-      if (!visibleRole.isSpy && actualRole.isSpy){
-        $el.addClass('spy-imposter');
+      if (visibleRole.isPossibleImposter(gameState.game.cards)) {
+        $el.addClass('possible-imposter-player');
+        $el.text( visibleRole.card );
+        if (actualRole.isSpy) {
+          $el.addClass('spy-imposter');
+        }
+        else {
+          $el.addClass('resistence-imposter');
+        }
       }
 
       $row.append($el);
     });
 
     if ($row.children().length === 0) {
-      $row.append(`<div class="matrix-cell matrix-role">-</div>`);
+      $row.append('<div class="matrix-cell matrix-role">-</div>');
     }
     $row.prepend(`<div class="matrix-cell matrix-label">${perspective.card}</div>`);
     $row.appendTo($vis);

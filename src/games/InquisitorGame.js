@@ -4,6 +4,6 @@ import NormalGame  from './NormalGame'
 export default {
   label: "Inquisitor",
   id: "game-inquisitor",
-  minPlayers: 5,
+  minPlayers: 7,
   cards: NormalGame.cards
 };

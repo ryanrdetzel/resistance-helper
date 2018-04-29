@@ -42,7 +42,7 @@ strong {
 }
 
 .wide-button {
-    width: 400px;
+    width: 300px;
     padding: 8px;
     display: inline-block;
     margin: 0 auto;
@@ -83,7 +83,7 @@ li {
     display: inline-block;
     margin: 2px;
     font-size: 14px;
-    min-width: 100px;
+    min-width: 140px;
     border-radius: 8px;
     background: rgba(0, 0, 0, 0.1);
 }
@@ -95,13 +95,13 @@ li {
 }
 
 .game-option, .custom-card {
-    font-size: 16px;
+    font-size: 14px;
     line-height: 16px;
     display: inline-block;
     border-radius: 4px;
     margin: 2px;
     outline: none;
-    min-width: 170px;
+    min-width: 145px;
 }
 .smaller {
     font-size: 12px;
@@ -144,20 +144,15 @@ li {
     display: inline-block;
     margin: 1px;
     padding: 4px;
-    width: 140px;
     font-size: 12px;
     text-align: center;
  }
 
 .matrix-label {
+    min-width: 90px;
     font-weight: bold;
     text-align: right;
     margin-right: 4px;
-    background-color: #eeeeee;
-}
-
-.matrix-header {
-    font-style: italic;
 }
 
 .matrix-role {

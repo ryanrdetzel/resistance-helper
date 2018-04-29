@@ -25,52 +25,31 @@ export const GOOD_HUNTER = 'Resist. Hunter';
 export const SPY_HUNTER = 'Spy Hunter';
 export const GOOD_DUMMY = 'Resist. Dummy';  // can pretend to be chief
 export const GOOD_COORDINATOR = 'Coordinator'; // known to good chief
-export const GOOD_PRETENDER = 'Pretender';  // appears as fake deep agent
 
 // Misc Mechanics
-
 export const DEEP_AGENT = 'Deep Agent'; // doesn't know other spies, but seen by them
+export const GOOD_PRETENDER = 'Pretender';  // appears as fake deep agent
 export const BLIND_SPY = 'Blind Spy';   // doesn't know other spies, visa v
 
 // Late player
 export const OBSERVER = 'Observer';
 
-/*
-Bodyguard: during the beginning of the game, the bodyguard sees who the commander is (commander raises his thumb while the bodyguard opens his eyes)
 
-False commander: Raises his thumb when the bodyguard looks for the commander, so the bodyguard does not know which is the real one.
-
-Deep cover: Does not raise his thumb when the commander sees the spies.
- */
+// layout of custom view
 export const CARD_GROUPS = [
-  {
-    label: 'Base',
-    cards: [GOOD, SPY]
-  },
-  {
-    label: 'Reverser',
-    cards: [GOOD_REVERSER, SPY_REVERSER]
-  },
-  {
-    label: 'Defector',
-    cards: [GOOD_DEFECTOR, SPY_DEFECTOR]
-  },
-  {
-    label: 'Assassin',
-    cards: [COMMANDER, FALSE_COMMANDER, BODYGUARD, ASSASSIN, DEEP_COVER]
-  },
-  {
-    label: 'Hunter',
-    cards: [GOOD_CHIEF, GOOD_HUNTER, GOOD_COORDINATOR, GOOD_DUMMY, SPY_CHIEF, SPY_HUNTER]
-  },
-  {
-    label: 'Deep Agent',
-    cards: [GOOD_PRETENDER, DEEP_AGENT]
-  },
-  {
-    label: 'Misc',
-    cards: [BLIND_SPY]
-  }
+  [SPY, GOOD],
+
+  [ASSASSIN, FALSE_COMMANDER, DEEP_COVER, BLIND_SPY],
+  [COMMANDER, BODYGUARD],
+
+  [DEEP_AGENT, GOOD_PRETENDER],
+
+  [SPY_REVERSER, GOOD_REVERSER],
+
+  [SPY_DEFECTOR, GOOD_DEFECTOR],
+
+  [SPY_CHIEF, SPY_HUNTER],
+  [GOOD_CHIEF, GOOD_HUNTER, GOOD_COORDINATOR, GOOD_DUMMY]
 ];
 
 export default class Role {

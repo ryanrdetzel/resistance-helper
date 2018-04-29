@@ -1,5 +1,5 @@
 
-import { GOOD, GOOD_CHIEF, GOOD_HUNTER, SPY, SPY_CHIEF, SPY_HUNTER } from './Roles'
+import { GOOD, GOOD_CHIEF, GOOD_HUNTER, SPY, SPY_CHIEF, SPY_HUNTER, GOOD_COORDINATOR, GOOD_DUMMY } from './Roles'
 
 export default {
   label: "Hunter",
@@ -10,8 +10,8 @@ export default {
     SPY_CHIEF,
     GOOD_HUNTER,
     SPY_HUNTER,
-    GOOD,
-    GOOD,
+    GOOD_COORDINATOR,
+    GOOD_DUMMY,
     SPY,
     GOOD_CHIEF,
     GOOD,
