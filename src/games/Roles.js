@@ -37,19 +37,17 @@ export const OBSERVER = 'Observer';
 
 // layout of custom view
 export const CARD_GROUPS = [
-  [SPY, GOOD],
+  [GOOD, SPY],
 
-  [ASSASSIN, FALSE_COMMANDER, DEEP_COVER, BLIND_SPY],
-  [COMMANDER, BODYGUARD],
+  [COMMANDER, BODYGUARD, ASSASSIN, FALSE_COMMANDER, DEEP_COVER, BLIND_SPY],
 
-  [DEEP_AGENT, GOOD_PRETENDER],
+  [GOOD_PRETENDER, DEEP_AGENT],
 
-  [SPY_REVERSER, GOOD_REVERSER],
+  [GOOD_REVERSER, SPY_REVERSER],
 
-  [SPY_DEFECTOR, GOOD_DEFECTOR],
+  [GOOD_DEFECTOR, SPY_DEFECTOR],
 
-  [SPY_CHIEF, SPY_HUNTER],
-  [GOOD_CHIEF, GOOD_HUNTER, GOOD_COORDINATOR, GOOD_DUMMY]
+  [GOOD_CHIEF, GOOD_HUNTER, GOOD_COORDINATOR, GOOD_DUMMY, SPY_CHIEF, SPY_HUNTER]
 ];
 
 export default class Role {
@@ -148,6 +146,7 @@ export default class Role {
             case ASSASSIN:
             case DEEP_COVER:
             case SPY_HUNTER:
+            case FALSE_COMMANDER:
               return SPY;
 
             case BLIND_SPY:

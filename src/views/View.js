@@ -112,6 +112,8 @@ function renderGameState(app) {
       $el = $(`<li><b>${player.name}</b> &mdash; ${role.card}</li>`);
       if (role.isPossibleImposter(game.cards)) {
         $el.addClass('possible-imposter-player');
+        // $el.html(`<b>${player.name}</b> &ndash; ${role.card}?`);
+        $el.append('?');
       }
       else if( role.isSpy ){
         $el.addClass('spy-player');
@@ -341,7 +343,7 @@ function renderRoleVisibility (app){
 
       if (visibleRole.isPossibleImposter(gameState.game.cards)) {
         $el.addClass('possible-imposter-player');
-        $el.text( visibleRole.card );
+        $el.text(`(${actualRole.card})`);
         if (actualRole.isSpy) {
           $el.addClass('spy-imposter');
         }
