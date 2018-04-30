@@ -112,7 +112,6 @@ function renderGameState(app) {
       $el = $(`<li><b>${player.name}</b> &mdash; ${role.card}</li>`);
       if (role.isPossibleImposter(game.cards)) {
         $el.addClass('possible-imposter-player');
-        // $el.html(`<b>${player.name}</b> &ndash; ${role.card}?`);
         $el.append('?');
       }
       else if( role.isSpy ){
@@ -356,9 +355,11 @@ function renderRoleVisibility (app){
     });
 
     if ($row.children().length === 0) {
-      $row.append('<div class="matrix-cell matrix-role">-</div>');
+      $row.append('<div class="matrix-cell matrix-role"> &ndash; </div>');
     }
-    $row.prepend(`<div class="matrix-cell matrix-label">${perspective.card}</div>`);
+    const $el = $(`<div class="matrix-cell matrix-label">${perspective.card}</div>`);
+    $el.addClass(perspective.isSpy? 'spy-imposter' : 'resistence-imposter');
+    $row.prepend($el);
     $row.appendTo($vis);
 
   });

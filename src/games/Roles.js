@@ -23,7 +23,7 @@ export const GOOD_CHIEF = 'Resist. Chief';
 export const SPY_CHIEF = 'Spy Chief';
 export const GOOD_HUNTER = 'Resist. Hunter';
 export const SPY_HUNTER = 'Spy Hunter';
-export const GOOD_DUMMY = 'Resist. Dummy';  // can pretend to be chief
+export const GOOD_DUMMY = 'Dummy Chief';  // can pretend to be chief
 export const GOOD_COORDINATOR = 'Coordinator'; // known to good chief
 
 // Misc Mechanics
