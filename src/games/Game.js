@@ -48,6 +48,7 @@ export default function GameSetup (type, presence) {
 
   return {
     game: game,
+    cards: game.cards.slice(0, playerList.length),
     players,
     first
   };

@@ -317,7 +317,8 @@ function renderRoleVisibility (app){
   if (! gameState)
     return;
 
-  const roles = sortedUniqueRoles(app.gameState.game.cards);
+  const roles = sortedUniqueRoles(gameState.cards);
+  console.log("CARDS?", gameState.cards, roles);
 
   roles.forEach(perspective => {
     const $row = $('<div class="matrix-row" />');
@@ -341,7 +342,7 @@ function renderRoleVisibility (app){
 
       $el.addClass(visibleRole.isSpy ? 'spy-player' : 'resistance-player');
 
-      if (visibleRole.isPossibleImposter(gameState.game.cards)) {
+      if (visibleRole.isPossibleImposter(gameState.cards)) {
         $el.addClass('possible-imposter-player');
         $el.text(`(${actualRole.card})`);
         if (actualRole.isSpy) {
