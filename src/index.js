@@ -187,7 +187,7 @@ appState.startGame = function (gameType) {
 /* Custom Game */
 const customGameRef = firebase.database().ref('custom');
 customGameRef.on('value', snapshot => {
-  const restore = snapshot.val();
+  const restore = snapshot.val() || {};
   appState.isCustom = restore.isCustom || false;
   appState.cards = restore.cards || [];
   render(appState);
