@@ -95,6 +95,7 @@ export default class Role {
             case DEEP_AGENT:
             case SPY_REVERSER:
             case SPY_DEFECTOR:
+            case FALSE_COMMANDER:
             case BLIND_SPY:
               return SPY;
             case DEEP_COVER:
