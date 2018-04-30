@@ -8,6 +8,8 @@ import NormalGame from './NormalGame';
 import PretenderGame from './PretenderGame';
 import ReverserGame from './ReverserGame';
 import TrapperGame from './TrapperGame';
+import BlindGame from './BlindGame';
+import MacbethGame from './MacbethGame';
 
 export const GAMES = [
   NormalGame,
@@ -18,6 +20,8 @@ export const GAMES = [
   DefectorGame,
   PretenderGame,
   HunterGame,
+  BlindGame,
+  MacbethGame,
   CustomGame
 ];
 
