@@ -166,8 +166,9 @@ function renderGamesList (app) {
 
     const str = `<button class='pure-button button-large game-option' id='${game.id}'>${game.label}</button>`;
     const $el = $(str);
+
     if( game.minPlayers > presenceCount ) {
-      $el.prop('disabled', true).append(`*${game.minPlayers}`);
+      $el.css('font-style', 'italic');
     }
 
     if( $el.text().length > 18 ){
