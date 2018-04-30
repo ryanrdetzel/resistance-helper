@@ -317,19 +317,25 @@ function renderRoleVisibility (app){
   if (! gameState)
     return;
 
-  const roles = sortedUniqueRoles(gameState.cards);
-  console.log("CARDS?", gameState.cards, roles);
+  const roles = sortedRoles(gameState.cards);
 
-  roles.forEach(perspective => {
+  roles.forEach( (perspective, i) => {
     const $row = $('<div class="matrix-row" />');
 
-    roles.forEach(actualRole => {
+    roles.forEach( (actualRole, j) => {
+
+      // don't need to see self
+      if ( i === j) {
+        return;
+      }
+
       const viewableCard = perspective.asVisibleCard(actualRole.card);
       const visibleRole = Role.fromCard(viewableCard||actualRole.card);
 
       if (!viewableCard) {
         return;
       }
+
 
       const $el = $('<div class="matrix-cell matrix-role"></div>');
 
@@ -367,13 +373,6 @@ function renderRoleVisibility (app){
   });
 }
 
-function sortedUniqueRoles (cards){
-  const seen = {};
-  const unique = cards.filter(card => {
-    if (seen[card] )
-      return false;
-    return seen[card] = true;
-  });
-
-  return unique.map(c => Role.fromCard(c)).sort(sortByTeamType)
+function sortedRoles (cards){
+  return cards.map(c => Role.fromCard(c)).sort(sortByTeamType);
 }
