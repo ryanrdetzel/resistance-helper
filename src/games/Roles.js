@@ -14,7 +14,7 @@ export const SPY_REVERSER = 'Spy Reverser';
 // Assassin Module
 export const ASSASSIN        = 'Assassin';        // hunts COMMANDER
 export const COMMANDER       = 'Commander';       // knows all spies
-export const FALSE_COMMANDER = 'False Commander'; // looks like COMMANDER
+export const FALSE_COMMANDER = 'False Comdr.'; // looks like COMMANDER
 export const BODYGUARD       = 'Body Guard';      // knows COMMANDER
 export const DEEP_COVER      = 'Deep Cover';      // normal spy, and invisible to COMMANDER
 

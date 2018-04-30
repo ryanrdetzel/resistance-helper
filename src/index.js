@@ -180,7 +180,6 @@ gameStateRef.on('value', function (snap) {
 appState.startGame = function (gameType) {
   const type = gameType || NormalGame.id;
   const gameState = GameSetup(type, appState.presence);
-  console.log("GAME STATE?", gameState)
   gameStateRef.set(gameState);
 };
 
