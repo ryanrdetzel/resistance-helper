@@ -114,25 +114,29 @@ li {
     padding: 6px;
 }
 
-.game-option {
+.sensitive {
+    display: none
 }
+
 .cards-section {
     margin: 8px 0 2px;
     font-size: 14px;
 }
-.button-success:before {
-    content: '(1st) ';
+
+.button-vote-up:before {
+    content: '⇧ ';
 }
-.button-success {
+.button-vote-up {
     color: white;
     background: rgb(28, 184, 65); /* this is a green */
 }
-.button-secondary:before {
-    content: '(2nd) ';
+
+.button-vote-down:before {
+    content: '⇩ ';
 }
-.button-secondary {
+.button-vote-down {
     color: white;
-    background: rgb(66, 184, 221); /* this is a light blue */
+    background: #c94c4c;
 }
 
 .matrix {

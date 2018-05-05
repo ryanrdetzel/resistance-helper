@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import Role, {CARD_GROUPS, OBSERVER, sortByTeamType} from '../games/Roles';
 import {GAMES} from '../games/Game';
+import CustomGame from '../games/CustomGame';
 
 export function render(app) {
   renderLobby(app);
@@ -54,6 +55,20 @@ export function initDom(app) {
     e.preventDefault();
     app.startCustomGame();
   });
+
+
+  $(document)
+    .on('touchstart mousedown', onSensitivePeek)
+    .on('mousedown mouseup', onSensitiveHide);
+}
+
+function onSensitivePeek () {
+  $('.sensitive').css('display', 'block');
+  $('#sensitive_msg').hide();
+}
+function onSensitiveHide () {
+  $('.sensitive').css('display', 'none');
+  $('#sensitive_msg').show();
 }
 
 function renderGameState(app) {
@@ -175,11 +190,12 @@ function renderGamesList (app) {
       $el.addClass('smaller');
     }
 
-    if( game.id === selected.primary )
-      $el.addClass('button-success');
+    const gameVote = selected[game.id] || 0;
+    if( gameVote === 1 )
+      $el.addClass('button-vote-up');
 
-    if( game.id === selected.secondary )
-      $el.addClass('button-secondary');
+    if( gameVote === -1 )
+      $el.addClass('button-vote-down');
 
     $el.prop('disabled', selected.isReady);
 
@@ -192,14 +208,33 @@ function renderGamesList (app) {
     app.setCustomGame();
   });
 
+  $('<br/>').insertBefore('#game-custom');
+
   const $game_option = $('.game-option');
   $game_option.click(event => {
-    handleGameTypeSelect(app, event.target.id);
+    cycleGameTypeVote(app, event.target.id);
   });
 
   $game_list.show();
 }
 
+function cycleGameTypeVote (app, button_id) {
+  const { selected } = app;
+
+  const oldVote = selected[button_id] || 0;
+  let newVote;
+  switch (oldVote){
+    case 1:
+      newVote = -1;
+      break;
+    case 0:
+      newVote = 1;
+      break;
+    default:
+      newVote = 0;
+  }
+  app.setGameVote(button_id, newVote);
+}
 function handleGameTypeSelect(app, button_id){
   // If it's primary, ignore
   // if it's secondary, make primary

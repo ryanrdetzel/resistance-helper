@@ -2,7 +2,7 @@ import Auth from './auth/TwitterAuth';
 import GameSetup from './games/Game';
 import CustomGame from './games/CustomGame';
 import NormalGame from './games/NormalGame';
-import Voting from './voting/RankedChoiceVoting';
+import Voting from './voting/PlusMinusVoting';
 import { render, initDom } from './views/View';
 
 import $ from 'jquery';
@@ -158,15 +158,21 @@ appState.setSelectedGames = function (primary = '', secondary = '') {
   ownBallotRef.onDisconnect().remove();
 };
 
+appState.setGameVote = function (gameType, value) {
+  const {currentPlayer} = appState;
+  if (!appState.currentPlayer)
+    return;
+  const ownBallotRef = firebase.database().ref(`ballots/${currentPlayer.uid}`);
+  ownBallotRef.update({
+    [gameType]: value
+  });
+  ownBallotRef.onDisconnect().remove();
+};
+
 function resolveVoting () {
   const { ballots } = appState;
-  const ballotsList = Object.keys(ballots).map(uid => {
-    const ballot = ballots[uid];
-    return [ballot.primary, ballot.secondary];
-  });
-  if (!ballotsList.length)
-    return null;
-  const results = Voting.results({ballots: ballotsList, tiebreak: true});
+  const results = Voting.results({ ballots, tiebreak: true });
+  appState.results = results;
   return results.winners[0];
 }
 

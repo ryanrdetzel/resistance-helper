@@ -22,7 +22,6 @@ export const GAMES = [
   HunterGame,
   BlindGame,
   MacbethGame,
-  CustomGame
 ];
 
 const gamesById = {};

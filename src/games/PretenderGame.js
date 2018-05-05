@@ -3,7 +3,7 @@ import { SPY, GOOD, DEEP_AGENT, GOOD_PRETENDER } from './Roles';
 
 export default {
   label: 'Pretender',
-  id: 'game-hunter-deep-agent',
+  id: 'game-pretender',
   minPlayers: 5,
   cards: [
     GOOD_PRETENDER,

@@ -3,7 +3,7 @@ import { GOOD, BLIND_SPY } from './Roles';
 
 export default {
   label: 'Blind',
-  id: 'game-blink',
+  id: 'game-blind',
   minPlayers: 5,
   cards: [
     GOOD,
