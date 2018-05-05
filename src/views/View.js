@@ -58,8 +58,8 @@ export function initDom(app) {
 
 
   $(document)
-    .on('touchstart mousedown', onSensitivePeek)
-    .on('mousedown mouseup', onSensitiveHide);
+    .bind('touchstart mousedown', onSensitivePeek)
+    .bind('touchend mouseup', onSensitiveHide);
 }
 
 function onSensitivePeek () {
