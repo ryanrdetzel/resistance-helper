@@ -70,7 +70,8 @@ export function initDom(app) {
   $(document).bind('touchend mouseup', onSensitiveHide);
 }
 
-function onSensitivePeek () {
+function onSensitivePeek (e) {
+  e.preventDefault();
   $('.sensitive').css('display', 'block');
 }
 function onSensitiveHide () {
@@ -219,6 +220,7 @@ function renderGamesList (app) {
   const $game_option = $('.game-option');
   $game_option.click(event => {
     cycleGameTypeVote(app, event.target.id);
+    event.preventDefault();
   });
 
   $game_list.show();
@@ -240,24 +242,6 @@ function cycleGameTypeVote (app, button_id) {
       newVote = 0;
   }
   app.setGameVote(button_id, newVote);
-}
-function handleGameTypeSelect(app, button_id){
-  // If it's primary, ignore
-  // if it's secondary, make primary
-  // If it's not, make it secondary
-  const { selected } = app;
-  let { primary, secondary } = selected;
-
-  if (button_id === primary || button_id === secondary ){
-    // Swap
-    [ primary, secondary ] = [ secondary, primary ];
-  } else {
-    if (!primary)
-      primary = button_id;
-    else
-      secondary = button_id;
-  }
-  app.setSelectedGames(primary, secondary);
 }
 
 function renderCustomOptions(app) {
@@ -329,10 +313,14 @@ function renderGameStartButton (app) {
   // $ready_btn.prop('disabled', currentPlayer.isReady);
 
   if (!currentPlayer.isReady) {
-    $ready_btn.text('Ready');
+    $ready_btn
+      .addClass('ready-initial')
+      .text('Click when Ready');
   }
   else {
-    $ready_btn.text(`Waiting for others... (${readyCount}/${presenceCount})`);
+    $ready_btn
+      .removeClass('ready-initial')
+      .text(`Waiting for others... (${readyCount}/${presenceCount})`);
 
   }
 }
@@ -344,7 +332,7 @@ function renderPlayerList (app) {
 
   $playerList.empty();
   presenceList.forEach(person => {
-    const str = `<li>${person.name} ${person.isReady ? '✔' : ''}</li>`;
+    const str = `<li>${person.name}${person.isReady ? '✓' : ''}</li>`;
     $playerList.append(str);
   });
 

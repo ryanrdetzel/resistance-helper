@@ -1,6 +1,6 @@
 body {
     font-family: Verdana, Georgia, Times, "Times New Roman", serif;
-    font-size: 18px;
+    font-size: 14px;
 }
 
 strong {
@@ -17,29 +17,6 @@ strong {
     margin: 20px 0;
 }
 
-.spy {
-    text-align: center;
-    background: #c94c4c;
-    color: white;
-    font-weight: bold;
-    padding: 20px 0;
-}
-
-.resistance {
-    text-align: center;
-    background: #034f84;
-    color: white;
-    padding: 20px 0;
-    font-weight: bold;
-}
-
-.observer {
-    text-align: center;
-    background: #888888;
-    color: white;
-    padding: 20px 0;
-    font-weight: bold;
-}
 
 .wide-button {
     width: 300px;
@@ -54,14 +31,6 @@ strong {
     text-align: center;
 }
 
-#playerList {
-    font-size: 14px;
-}
-
-#playerList li {
-    background: lightgreen;
-}
-
 
 ul {
     list-style: none;
@@ -73,39 +42,41 @@ ul {
 
 .centered {
     text-align: center;
-    padding: 10px 0;
-    margin-right: auto;
     margin-left: auto;
+    margin-right: auto;
+}
+
+.section {
+    text-align: center;
+    padding: 10px 0;
 }
 
 li {
     padding: 4px 8px;
     display: inline-block;
     margin: 2px;
-    font-size: 14px;
-    min-width: 140px;
+    min-width: 120px;
     border-radius: 8px;
-    background: rgba(0, 0, 0, 0.1);
+    background: #AAB8C2;
 }
 
 #game_list {
     text-align: center;
     padding: 10px 10px;
-    max-width: 600px;
 }
 
 .game-option, .custom-card {
-    font-size: 14px;
     line-height: 16px;
     display: inline-block;
     border-radius: 4px;
     margin: 2px;
     outline: none;
-    min-width: 145px;
+    min-width: 120px;
 }
 .smaller {
-    font-size: 12px;
+    font-size: 14px;
 }
+
 #cards_available ul {
     margin-top: 10px;
 }
@@ -131,33 +102,20 @@ li {
 
 .cards-section {
     margin: 8px 0 2px;
-    font-size: 14px;
 }
 
 button, li {
-    background: rgba(0, 0, 0, 0.01);
-    border: 1px solid #eeeeee;
+    background: #F5F8FA;
+    border: 1px solid #CCD6DD;
+    padding: 4px 6px;
     border-radius: 8px;
+    font: inherit;
+    box-shadow: none;
 }
 
 button:focus {
     outline: none;
-}
-
-.button-vote-up:before {
-    content: '⇧ ';
-}
-.button-vote-up {
-    color: white;
-    background: rgb(28, 184, 65); /* this is a green */
-}
-
-.button-vote-down:before {
-    content: '⇩ ';
-}
-.button-vote-down {
-    color: white;
-    background: #c94c4c;
+    box-shadow: none;
 }
 
 .matrix {
@@ -168,10 +126,11 @@ button:focus {
 .matrix-cell {
     display: inline-block;
     margin: 1px;
-    padding: 4px;
+    padding: 4px 6px;
     font-size: 12px;
     text-align: center;
     min-width: 25px;
+    border-radius: 4px;
 }
 
 .matrix-label {
@@ -186,24 +145,97 @@ button:focus {
 }
 
 .matrix-row {
+    margin-top: 8px;
     overflow: auto;
     text-align: left;
 }
 
+#playerList li {
+    color: #14171A;
+    background: white;
+    text-decoration: underline;
+    border: none;
+    font-size: 10px;
+    min-width: auto;
+    padding: 2px;
+    line-height: 1.1em;
+}
+
+.spy {
+    text-align: center;
+    background: rgba(160, 23, 68, 0.51);
+    color: white;
+    font-weight: bold;
+    padding: 20px 0;
+}
+
+.resistance {
+    text-align: center;
+    background: rgba(0, 95, 209, 0.51);
+    color: white;
+    padding: 20px 0;
+    font-weight: bold;
+}
+
+.observer {
+    text-align: center;
+    background: #888888;
+    color: white;
+    padding: 20px 0;
+    font-weight: bold;
+}
 
 .spy-player {
-    background: rgba(201, 76, 76, 0.35);
+    background: rgba(160, 23, 68, 0.51);
+    border:none;
+    color: white;
 }
 
 .resistance-player {
-    background: rgba(3, 79, 132, 0.25);
+    background: rgba(0, 95, 209, 0.75);
+    border:none;
+    color: white;
 }
 .possible-imposter-player {
-    background: #cbcbcb;
+    border:none;
+    background: #CCD6DD;
 }
 .resistence-imposter {
-    color: #034f84;
+    color: #005FD1;
 }
 .spy-imposter {
-    color: #c94c4c;
+    color: #A01744;
+}
+
+.game-option {
+    color: #14171A;
+    background: #F5F8FA;
+    border-color: #CCD6DD;
+}
+
+.button-vote-up:after {
+    content: ' ⇧';
+}
+.button-vote-up {
+    color: white;
+    background: #17BF63;
+    border-color: #17BF63;
+}
+
+.button-vote-down:after {
+    content: ' ⇩';
+}
+.button-vote-down {
+    color: white;
+    background: #E0245E;
+    border-color: #E0245E;
+}
+.panel {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.ready-initial {
+    background: #17BF63;
+    color: white;
 }

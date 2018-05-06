@@ -8,16 +8,14 @@
     <script src="bundle.js"></script>
 </head>
 <body>
-<div id="lobby" class="">
-    <div class="">
-        <form class="" onsubmit="return false;">
-            <button id="join" class="">Join Game</button>
-        </form>
+<div id="lobby" class="panel">
+    <div class="centered">
+            <button id="join" class="wide-button">Join Game</button>
     </div>
 </div>
 
 <!-- GAME -->
-<div id="game" class="">
+<div id="game" class="panel">
 
     <div class="centered">
         <strong>Players (<span class="peopleCount">0</span>)</strong>
@@ -52,41 +50,40 @@
 </div>
 
 <!-- Result -->
-<div id="results" class="">
-    <div class="centered">
+<div id="results" class="panel">
+    <div class="section centered">
         <strong>Game Type</strong>
         <ul class="" id="game_type">
         </ul>
     </div>
+
+    <div class="section centered">
+        <strong id="first_player"> x </strong> goes first
+    </div>
     <div class="centered" id="sensitive_msg">
-        <div style="padding-bottom: 4px;">
+        <div class="section">
             Hold for sensitive information.
         </div>
-        <div class="centered sensitive">
+        <div class="section sensitive">
             <strong>Your Role</strong>
             <ul class="" id="own_role"></ul>
         </div>
-        <div class="centered sensitive">
+        <div class="section sensitive">
             <strong>You See</strong>
             <ul class="" id="visible_list">
             </ul>
         </div>
     </div>
 
-    <div class="centered">
+    <div class="section centered">
         <strong>Game Visibility</strong>
         <div>
             <div id="visibility" class="matrix"></div>
         </div>
     </div>
 
-    <div class=" centered">
-        <div class="first">
-            <div>
-                <strong id="first_player"> x </strong> goes first
-            </div>
-            <button class=" wide-button" id="newGame">Reset Game</button>
-        </div>
+    <div class="centered">
+        <button class=" wide-button" id="newGame">Reset Game</button>
     </div>
 </div>
 </body>
