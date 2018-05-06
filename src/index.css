@@ -1,5 +1,5 @@
 body {
-    font-family: Georgia, Times, "Times New Roman", serif;
+    font-family: Verdana, Georgia, Times, "Times New Roman", serif;
     font-size: 18px;
 }
 
@@ -114,13 +114,34 @@ li {
     padding: 6px;
 }
 
+#sensitive_msg {
+    background: rgba(0, 0, 0, 0.05);
+    padding: 6px;
+    margin: 0px;
+    border-radius: 8px;
+}
+#sensitive_msg :last-child{
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
 .sensitive {
-    display: none
+    background: white;
+    display: none;
 }
 
 .cards-section {
     margin: 8px 0 2px;
     font-size: 14px;
+}
+
+button, li {
+    background: rgba(0, 0, 0, 0.01);
+    border: 1px solid #eeeeee;
+    border-radius: 8px;
+}
+
+button:focus {
+    outline: none;
 }
 
 .button-vote-up:before {

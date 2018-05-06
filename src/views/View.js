@@ -49,6 +49,15 @@ export function initDom(app) {
     app.toggleUserReady();
   });
 
+  ui.$ready_btn.bind('touchstart',  e => {
+    e.preventDefault();
+    if (e.touches.length > 1) {
+      app.forceStart();
+      return;
+    }
+    app.toggleUserReady();
+  });
+
   ui.$join.click(app.signIn);
 
   ui.$start_custom.click(e => {
@@ -57,18 +66,15 @@ export function initDom(app) {
   });
 
 
-  $(document)
-    .bind('touchstart mousedown', onSensitivePeek)
-    .bind('touchend mouseup', onSensitiveHide);
+  $('#sensitive_msg').bind('touchstart mousedown', onSensitivePeek)
+  $(document).bind('touchend mouseup', onSensitiveHide);
 }
 
 function onSensitivePeek () {
   $('.sensitive').css('display', 'block');
-  $('#sensitive_msg').hide();
 }
 function onSensitiveHide () {
   $('.sensitive').css('display', 'none');
-  $('#sensitive_msg').show();
 }
 
 function renderGameState(app) {
@@ -140,7 +146,7 @@ function renderGameState(app) {
   });
 
   if (! $visible_list.children().length) {
-    $visible_list.text('(none)');
+    $visible_list.text('-');
   }
 
   $results.show();

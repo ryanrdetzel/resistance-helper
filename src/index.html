@@ -4,89 +4,88 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
     <link rel="stylesheet" href="index.css">
     <script src="bundle.js"></script>
 </head>
 <body>
-<div id="lobby" class="pure-g">
-    <div class="pure-u-1 pure-u-md-1-1">
-        <form class="pure-form" onsubmit="return false;">
-            <button id="join" class="pure-button pure-input-1">Join Game</button>
+<div id="lobby" class="">
+    <div class="">
+        <form class="" onsubmit="return false;">
+            <button id="join" class="">Join Game</button>
         </form>
     </div>
 </div>
 
 <!-- GAME -->
-<div id="game" class="pure-g">
+<div id="game" class="">
 
-    <div class="pure-u-1 pure-u-md-1-1 centered">
+    <div class="centered">
         <strong>Players (<span class="peopleCount">0</span>)</strong>
         <ul id="playerList"></ul>
     </div>
 
-    <div class="pure-u-1">
+    <div class="">
         <div class="centered" id="game_list"></div>
 
         <div id="custom_chooser" style="display: none">
-            <div class="pure-u-1 pure-u-md-1-1 centered">
+            <div class="centered">
                 <strong>Available Roles</strong>
                 <div class="centered" id="cards_available"></div>
             </div>
 
-            <div class="pure-u-1 pure-u-md-1-1 centered">
+            <div class="centered">
                 <strong>Selected Roles</strong>
                 <ul class="centered" id="cards_chosen">
                 </ul>
             </div>
         </div>
     </div>
-    <div class="pure-u-1 pure-u-md-1-1 centered">
-        <button class="pure-button wide-button" id="ready_btn">
+    <div class="centered">
+        <button class="wide-button" id="ready_btn">
             Ready
         </button>
 
-        <button class="pure-button wide-button" id="start_custom" style="display: none;">
+        <button class="wide-button" id="start_custom" style="display: none;">
             Start Game <span id="start_custom_count"></span>
         </button>
     </div>
 </div>
 
 <!-- Result -->
-<div id="results" class="pure-g">
-    <div class="pure-u-1 pure-u-md-1-1 centered">
+<div id="results" class="">
+    <div class="centered">
         <strong>Game Type</strong>
-        <ul class="pure-u-1" id="game_type">
+        <ul class="" id="game_type">
         </ul>
     </div>
-    <div class="pure-u-1 pure-u-md-1-1 centered" id="sensitive_msg">
-        Press and hold anywhere to see sensative information.
-    </div>
-    <div class="pure-u-1 pure-u-md-1-1 centered sensitive">
-        <strong>Your Role</strong>
-        <ul class="pure-u-1" id="own_role">
-        </ul>
-    </div>
-    <div class="pure-u-1 pure-u-md-1-1 centered sensitive">
-        <strong>You See</strong>
-        <ul class="pure-u-1 " id="visible_list">
-        </ul>
+    <div class="centered" id="sensitive_msg">
+        <div style="padding-bottom: 4px;">
+            Hold for sensitive information.
+        </div>
+        <div class="centered sensitive">
+            <strong>Your Role</strong>
+            <ul class="" id="own_role"></ul>
+        </div>
+        <div class="centered sensitive">
+            <strong>You See</strong>
+            <ul class="" id="visible_list">
+            </ul>
+        </div>
     </div>
 
-    <div class="pure-u-1 pure-u-md-1-1 centered">
+    <div class="centered">
         <strong>Game Visibility</strong>
         <div>
             <div id="visibility" class="matrix"></div>
         </div>
     </div>
 
-    <div class="pure-u-1 centered">
+    <div class=" centered">
         <div class="first">
             <div>
                 <strong id="first_player"> x </strong> goes first
             </div>
-            <button class="pure-button wide-button" id="newGame">Reset Game</button>
+            <button class=" wide-button" id="newGame">Reset Game</button>
         </div>
     </div>
 </div>
