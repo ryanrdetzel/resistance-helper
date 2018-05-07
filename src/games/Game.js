@@ -1,25 +1,29 @@
 
 import AssassinGame from './AssassinGame';
+import AssassinPlusGame from './AssassinPlusGame';
+import BlindGame from './BlindGame';
 import CustomGame from './CustomGame';
 import DefectorGame from './DefectorGame';
 import HunterGame from './HunterGame';
+import HunterPlusGame from './HunterPlusGame';
 import InquisitorGame from './InquisitorGame';
+import MacbethGame from './MacbethGame';
 import NormalGame from './NormalGame';
 import PretenderGame from './PretenderGame';
 import ReverserGame from './ReverserGame';
 import TrapperGame from './TrapperGame';
-import BlindGame from './BlindGame';
-import MacbethGame from './MacbethGame';
 
 export const GAMES = [
   NormalGame,
-  AssassinGame,
   ReverserGame,
+  AssassinGame,
+  AssassinPlusGame,
   TrapperGame,
   InquisitorGame,
   DefectorGame,
   PretenderGame,
   HunterGame,
+  HunterPlusGame,
   BlindGame,
   MacbethGame,
 ];

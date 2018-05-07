@@ -1,9 +1,9 @@
 
-import { GOOD, COMMANDER, SPY, ASSASSIN, FALSE_COMMANDER, BODYGUARD, DEEP_COVER } from './Roles'
+import { GOOD, COMMANDER, SPY, ASSASSIN} from './Roles';
 
 export default {
-  label: "Assassin",
-  id: "game-assassin",
+  label: 'Assassin',
+  id: 'game-assassin',
   minPlayers: 5,
   cards: [
     COMMANDER,
@@ -11,10 +11,10 @@ export default {
     GOOD,
     GOOD,
     SPY,
-    BODYGUARD,
-    FALSE_COMMANDER,
+    GOOD,
+    SPY,
     GOOD,
     GOOD,
-    DEEP_COVER
+    SPY
   ]
 };
