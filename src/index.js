@@ -166,11 +166,15 @@ appState.setGameVote = function (gameType, value) {
   ownBallotRef.update({
     [gameType]: value
   });
-  ownBallotRef.onDisconnect().remove();
+};
+
+appState.getPresentVotes = () => {
+  const { ballots, presence } = appState;
+  return Object.keys(presence).map(uid => ballots[uid]).filter(b => !!b);
 };
 
 function resolveVoting () {
-  const { ballots } = appState;
+  const ballots = appState.getPresentVotes();
   const results = Voting.results({ ballots, tiebreak: true });
   appState.results = results;
   return results.winners[0];
