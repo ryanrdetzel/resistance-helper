@@ -3,7 +3,6 @@ import {GAMES} from '../games/Game';
 class PlusMinusVoting {
   static results({ballots, tiebreak = false}) {
     const scores = {};
-    let maxScore = 0;
 
     GAMES.forEach(game => scores[game.id] = 0);
 
@@ -13,13 +12,13 @@ class PlusMinusVoting {
         if (scores[gameType] === undefined) {
           scores[gameType] = 0;
         }
-        const gameTotal = scores[gameType] += vote;
-
-        if(gameTotal > maxScore)
-          maxScore = gameTotal;
+        scores[gameType] += vote;
       });
     });
 
+    const values = Object.keys(scores).map(gameType => scores[gameType]);
+
+    const maxScore = Math.max.apply(Math, values);
     const winners = Object.keys(scores).filter(gameType => scores[gameType] === maxScore);
 
     if( tiebreak ){
