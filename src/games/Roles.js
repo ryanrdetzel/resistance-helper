@@ -189,7 +189,9 @@ export default class Role {
 
   static getVisibleRoles(uid, gameState) {
     const { players } = gameState;
-    const viewer = Role.fromCard(players[uid].card);
+
+    const card = players[uid] ? players[uid].card : OBSERVER;
+    const viewer = Role.fromCard(card);
     const playerList = Object.keys(players).map(uid => players[uid]);
 
     const visible = playerList.map(player => {

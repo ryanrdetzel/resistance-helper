@@ -124,7 +124,13 @@ function renderGameState(app) {
 
   const $own_role = $('#own_role').empty();
   const $el = $(`<li><b>${role.card}</b></li>`);
-  $el.addClass(role.isSpy ? 'spy-player' : 'resistance-player');
+
+  if (role.isSpy) {
+    $el.addClass('spy-player');
+  }
+  else if (role.isSpy === false){
+    $el.addClass('resistance-player');
+  }
   $own_role.append($el);
 
   visibleRoles.forEach(player => {
