@@ -11,7 +11,7 @@ import MacbethGame from './MacbethGame';
 import NormalGame from './NormalGame';
 import PretenderGame from './PretenderGame';
 import ReverserGame from './ReverserGame';
-import SecretCheif from './SecretCheif';
+import SecretChief from './SecretChief';
 import TrapperGame from './TrapperGame';
 
 export const GAMES = [
@@ -27,7 +27,7 @@ export const GAMES = [
   HunterPlusGame,
   BlindGame,
   MacbethGame,
-  SecretCheif
+  SecretChief
 ];
 
 const gamesById = {};
