@@ -81,11 +81,12 @@ function deal (cards, presence) {
 }
 
 function shuffle (deck) {
-  const shuffled = [];
-  const input = deck.slice();
-  while (input.length) {
-    const i = Math.floor( Math.random() * input.length );
-    shuffled.push(input.splice(i, 1)[0]);
+  var shuffled = deck.slice();
+  for (var i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const x = shuffled[i];
+      shuffled[i] = shuffled[j];
+      shuffled[j] = x;
   }
   return shuffled;
 }
