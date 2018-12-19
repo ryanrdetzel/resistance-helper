@@ -22,10 +22,8 @@ export const GAMES = [
   TrapperGame,
   InquisitorGame,
   DefectorGame,
-  PretenderGame,
   HunterGame,
   HunterPlusGame,
-  BlindGame,
   MacbethGame,
   SecretChief
 ];
@@ -52,8 +50,8 @@ export default function GameSetup (type, presence) {
 
   /* Who goes first? */
   const playerList = Object.keys(players).map(uid => players[uid]);
-  const firstIndex = Math.floor( Math.random() * playerList.length);
-  const first = playerList[firstIndex];
+  const playerListShuffled = shuffle(playerList);
+  const first = playerListShuffled[0];
 
   return {
     game: game,
@@ -80,8 +78,8 @@ function deal (cards, presence) {
   return players;
 }
 
-function shuffle (deck) {
-  var shuffled = deck.slice();
+function shuffle (objs) {
+  var shuffled = objs.slice();
   for (var i = shuffled.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       const x = shuffled[i];
