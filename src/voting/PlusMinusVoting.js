@@ -1,4 +1,4 @@
-import {GAMES} from '../games/Game';
+import {GAMES} from '../cards/Game';
 
 class PlusMinusVoting {
   static results({ballots, tiebreak = false}) {

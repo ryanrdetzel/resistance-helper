@@ -1,7 +1,7 @@
 import Auth from './auth/TwitterAuth';
-import GameSetup from './games/Game';
-import CustomGame from './games/CustomGame';
-import NormalGame from './games/NormalGame';
+import GameSetup from './cards/Game';
+import CustomGame from './cards/games/Custom';
+import NormalGame from './cards/games/Normal';
 import Voting from './voting/PlusMinusVoting';
 import { render, initDom } from './views/View';
 

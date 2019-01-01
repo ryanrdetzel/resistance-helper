@@ -1,5 +1,5 @@
 
-import NormalGame  from './NormalGame'
+import NormalGame  from './Normal'
 
 export default {
   label: 'Trapper',

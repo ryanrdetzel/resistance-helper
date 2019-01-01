@@ -1,5 +1,5 @@
 
-import { SPY, GOOD, DEEP_AGENT, GOOD_PRETENDER } from './Roles';
+import { SPY, GOOD, DEEP_AGENT, GOOD_PRETENDER } from '../Roles';
 
 export default {
   label: 'Pretender',

@@ -1,5 +1,5 @@
 
-import { GOOD, COMMANDER, SPY, ASSASSIN} from './Roles';
+import { GOOD, COMMANDER, SPY, ASSASSIN} from '../Roles';
 
 export default {
   label: 'Assassin',

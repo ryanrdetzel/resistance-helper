@@ -1,5 +1,5 @@
 
-import { GOOD, COMMANDER, SPY, ASSASSIN, FALSE_COMMANDER, BODYGUARD, DEEP_COVER } from './Roles';
+import { GOOD, COMMANDER, SPY, ASSASSIN, FALSE_COMMANDER, BODYGUARD, DEEP_COVER } from '../Roles';
 
 export default {
   label: 'Assassin+',

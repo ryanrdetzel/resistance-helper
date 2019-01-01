@@ -1,5 +1,5 @@
 
-import { GOOD, SPY, COMMANDER, ASSASSIN, GOOD_DEFECTOR, SPY_DEFECTOR } from './Roles';
+import { GOOD, SPY, COMMANDER, ASSASSIN, GOOD_DEFECTOR, SPY_DEFECTOR } from '../Roles';
 
 export default {
   label: 'Macbeth',

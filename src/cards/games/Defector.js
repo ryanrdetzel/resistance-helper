@@ -1,5 +1,5 @@
 
-import { GOOD, GOOD_DEFECTOR, SPY, SPY_DEFECTOR } from './Roles'
+import { GOOD, GOOD_DEFECTOR, SPY, SPY_DEFECTOR } from '../Roles';
 
 export default {
   label: "Defector",

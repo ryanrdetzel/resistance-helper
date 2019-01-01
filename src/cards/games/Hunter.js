@@ -1,5 +1,5 @@
 
-import { GOOD, GOOD_CHIEF, GOOD_HUNTER, SPY, SPY_CHIEF, SPY_HUNTER, GOOD_COORDINATOR, GOOD_DUMMY } from './Roles';
+import { GOOD, GOOD_CHIEF, GOOD_HUNTER, SPY, SPY_CHIEF, SPY_HUNTER } from '../Roles';
 
 export default {
   label: 'Hunter',

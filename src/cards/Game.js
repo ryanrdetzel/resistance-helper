@@ -1,21 +1,20 @@
 
-import AssassinGame from './AssassinGame';
-import AssassinPlusGame from './AssassinPlusGame';
-import BlindGame from './BlindGame';
-import CustomGame from './CustomGame';
-import DefectorGame from './DefectorGame';
-import HunterGame from './HunterGame';
-import HunterPlusGame from './HunterPlusGame';
-import InquisitorGame from './InquisitorGame';
-import MacbethGame from './MacbethGame';
-import NormalGame from './NormalGame';
-import PlotGame from './PlotGame';
-import PretenderGame from './PretenderGame';
-import ReverserGame from './ReverserGame';
-import RogueGame from './RogueGame';
-import SergeantGame from './SergeantGame';
-import SecretChief from './SecretChief';
-import TrapperGame from './TrapperGame';
+import AssassinGame from './games/Assassin';
+import AssassinPlusGame from './games/AssassinPlus';
+import BlindGame from './games/Blind';
+import DefectorGame from './games/Defector';
+import HunterGame from './games/Hunter';
+import HunterPlusGame from './games/HunterPlus';
+import InquisitorGame from './games/Inquisitor';
+import MacbethGame from './games/Macbeth';
+import NormalGame from './games/Normal';
+import PlotGame from './games/Plot';
+import PretenderGame from './games/Pretender';
+import ReverserGame from './games/Reverser';
+import RogueGame from './games/Rogue';
+import SergeantGame from './games/Sergeant';
+import SecretChief from './games/SecretChief';
+import TrapperGame from './games/Trapper';
 
 export const GAMES = [
   NormalGame,
@@ -29,10 +28,10 @@ export const GAMES = [
   HunterGame,
   HunterPlusGame,
   BlindGame,
-  MacbethGame,
   RogueGame,
   SergeantGame,
   PlotGame,
+  MacbethGame,
   SecretChief
 ];
 

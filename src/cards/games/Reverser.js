@@ -1,5 +1,5 @@
 
-import { GOOD, GOOD_REVERSER, SPY, SPY_REVERSER } from './Roles'
+import { GOOD, GOOD_REVERSER, SPY, SPY_REVERSER } from '../Roles'
 
 export default {
   label: "Reverser",

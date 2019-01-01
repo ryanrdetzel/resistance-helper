@@ -1,7 +1,6 @@
 import $ from 'jquery';
-import Role, {CARD_GROUPS, OBSERVER, sortByTeamType} from '../games/Roles';
-import {GAMES} from '../games/Game';
-import CustomGame from '../games/CustomGame';
+import Role, {CARD_GROUPS, OBSERVER, sortByTeamType} from '../cards/Roles';
+import {GAMES} from '../cards/Game';
 
 export function render(app) {
   renderLobby(app);
