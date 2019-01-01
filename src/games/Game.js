@@ -9,8 +9,11 @@ import HunterPlusGame from './HunterPlusGame';
 import InquisitorGame from './InquisitorGame';
 import MacbethGame from './MacbethGame';
 import NormalGame from './NormalGame';
+import PlotGame from './PlotGame';
 import PretenderGame from './PretenderGame';
 import ReverserGame from './ReverserGame';
+import RogueGame from './RogueGame';
+import SergeantGame from './SergeantGame';
 import SecretChief from './SecretChief';
 import TrapperGame from './TrapperGame';
 
@@ -27,6 +30,9 @@ export const GAMES = [
   HunterPlusGame,
   BlindGame,
   MacbethGame,
+  RogueGame,
+  SergeantGame,
+  PlotGame,
   SecretChief
 ];
 
@@ -81,12 +87,12 @@ function deal (cards, presence) {
 }
 
 function shuffle (deck) {
-  var shuffled = deck.slice();
-  for (var i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      const x = shuffled[i];
-      shuffled[i] = shuffled[j];
-      shuffled[j] = x;
+  const shuffled = deck.slice();
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const x = shuffled[i];
+    shuffled[i] = shuffled[j];
+    shuffled[j] = x;
   }
   return shuffled;
 }

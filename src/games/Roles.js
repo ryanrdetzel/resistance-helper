@@ -31,6 +31,10 @@ export const DEEP_AGENT = 'Deep Agent'; // doesn't know other spies, but seen by
 export const GOOD_PRETENDER = 'Pretender';  // appears as fake deep agent
 export const BLIND_SPY = 'Blind Spy';   // doesn't know other spies, visa v
 
+// Rogue Module
+export const GOOD_ROGUE = 'Rest. Rogue';
+export const SPY_ROGUE = 'Spy Rogue';    // not visible to spies or commander
+
 // Late player
 export const OBSERVER = 'Observer';
 
@@ -70,6 +74,7 @@ export default class Role {
       case GOOD_DUMMY:
       case GOOD_COORDINATOR:
       case GOOD_PRETENDER:
+      case GOOD_ROGUE:
         break;
 
       case GOOD_CHIEF:
@@ -99,6 +104,7 @@ export default class Role {
             case BLIND_SPY:
               return SPY;
             case DEEP_COVER:
+            case SPY_ROGUE:
             default:
               return;
           }
@@ -120,6 +126,7 @@ export default class Role {
       // blind spy visibility
       case SPY_DEFECTOR:
       case BLIND_SPY:
+      case SPY_ROGUE:
       case DEEP_AGENT:
         this.isSpy = true;
         break;
@@ -151,6 +158,7 @@ export default class Role {
               return SPY;
 
             case BLIND_SPY:
+            case SPY_ROGUE:
             case SPY_REVERSER:
             default:
               return;
