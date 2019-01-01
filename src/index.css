@@ -239,3 +239,7 @@ button:focus {
     background: #17BF63;
     color: white;
 }
+
+#reset_votes {
+    margin: .5em;
+}

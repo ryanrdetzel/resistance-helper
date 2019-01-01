@@ -23,6 +23,7 @@ export function initDom(app) {
     $game_type: $('#game_type'),
     $custom_chooser: $('#custom_chooser'),
     $results: $('#results'),
+    $reset_votes: $('#reset_votes'),
     $first_player: $('#first_player'),
     $team: $('#team'),
     $playerCount: $('.playerCount'),
@@ -64,8 +65,12 @@ export function initDom(app) {
     app.startCustomGame();
   });
 
+  ui.$reset_votes.click(e => {
+    e.preventDefault();
+    app.resetVotes();
+  });
 
-  $('#sensitive_msg').bind('touchstart mousedown', onSensitivePeek)
+  $('#sensitive_msg').bind('touchstart mousedown', onSensitivePeek);
   $(document).bind('touchend mouseup', onSensitiveHide);
 }
 

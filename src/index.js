@@ -168,6 +168,14 @@ appState.setGameVote = function (gameType, value) {
   });
 };
 
+appState.resetVotes = function () {
+  const {currentPlayer} = appState;
+  if (!appState.currentPlayer)
+    return;
+  const ownBallotRef = firebase.database().ref(`ballots/${currentPlayer.uid}`);
+  ownBallotRef.set({});
+};
+
 appState.getPresentVotes = () => {
   const { ballots, presence } = appState;
   return Object.keys(presence).map(uid => ballots[uid]).filter(b => !!b);
