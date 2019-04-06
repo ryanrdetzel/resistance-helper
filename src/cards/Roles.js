@@ -35,8 +35,9 @@ export const BLIND_SPY = 'Blind Spy';   // doesn't know other spies, visa v
 export const GOOD_ROGUE = 'Rest. Rogue';
 export const SPY_ROGUE = 'Spy Rogue';    // not visible to spies or commander
 
-// Late player
-export const OBSERVER = 'Observer';
+// Custom
+export const OBSERVER = 'Observer';  // Late player
+export const GOOD_WITNESS = 'Witness';
 
 
 // layout of custom view
@@ -75,7 +76,17 @@ export default class Role {
       case GOOD_COORDINATOR:
       case GOOD_PRETENDER:
       case GOOD_ROGUE:
+      case GOOD_WITNESS:
+        this.asVisibleCard = card => {
+          switch (card) {
+            case GOOD_WITNESS:
+              return card;
+            default:
+              return;
+          }
+        };
         break;
+
 
       case GOOD_CHIEF:
         this.asVisibleCard = card => {

@@ -32,7 +32,7 @@ export function initDom(app) {
     $cards_available: $('#cards_available'),
     $cards_chosen: $('#cards_chosen'),
     $start_custom_count: $('#start_custom_count'),
-    $playerList: $('#playerList'),
+    $playerList: $('.playerList'),
   };
 
 

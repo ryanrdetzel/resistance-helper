@@ -1,6 +1,7 @@
 
 import AssassinGame from './games/Assassin';
 import AssassinPlusGame from './games/AssassinPlus';
+import AssassinWitness from './games/AssassinWitness';
 import BlindGame from './games/Blind';
 import DefectorGame from './games/Defector';
 import HunterGame from './games/Hunter';
@@ -21,6 +22,7 @@ export const GAMES = [
   ReverserGame,
   AssassinGame,
   AssassinPlusGame,
+  AssassinWitness,
   TrapperGame,
   InquisitorGame,
   DefectorGame,

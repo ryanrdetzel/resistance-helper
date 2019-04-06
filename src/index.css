@@ -150,7 +150,7 @@ button:focus {
     text-align: left;
 }
 
-#playerList li {
+.playerList li {
     color: #14171A;
     background: white;
     text-decoration: underline;
