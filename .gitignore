@@ -1,6 +1,7 @@
 dist
 node_modules
 .idea
+.firebase
 *.log
 DS_Store
 *~
