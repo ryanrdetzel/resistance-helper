@@ -38,6 +38,7 @@ export const SPY_ROGUE = 'Spy Rogue';    // not visible to spies or commander
 // Custom
 export const OBSERVER = 'Observer';  // Late player
 export const GOOD_WITNESS = 'Witness';
+export const SPY_SYMPATHIZER = 'Sympathizer';
 
 
 // layout of custom view
@@ -139,6 +140,7 @@ export default class Role {
       case BLIND_SPY:
       case SPY_ROGUE:
       case DEEP_AGENT:
+      case SPY_SYMPATHIZER:
         this.isSpy = true;
         break;
 
@@ -157,6 +159,7 @@ export default class Role {
             case SPY_CHIEF:
             case SPY_DEFECTOR:
             case DEEP_AGENT:
+            case SPY_SYMPATHIZER:
               return card;
 
             case GOOD_PRETENDER:

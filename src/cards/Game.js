@@ -16,13 +16,13 @@ import RogueGame from './games/Rogue';
 import SergeantGame from './games/Sergeant';
 import SecretChief from './games/SecretChief';
 import TrapperGame from './games/Trapper';
+import Sympathizer from "./games/Sympathizer";
 
 export const GAMES = [
   NormalGame,
   ReverserGame,
   AssassinGame,
   AssassinPlusGame,
-  AssassinWitness,
   TrapperGame,
   InquisitorGame,
   DefectorGame,
@@ -34,6 +34,8 @@ export const GAMES = [
   SergeantGame,
   PlotGame,
   MacbethGame,
+  AssassinWitness,
+  Sympathizer,
   SecretChief
 ];
 
