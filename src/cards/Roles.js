@@ -159,7 +159,6 @@ export default class Role {
             case SPY_CHIEF:
             case SPY_DEFECTOR:
             case DEEP_AGENT:
-            case SPY_SYMPATHIZER:
               return card;
 
             case GOOD_PRETENDER:

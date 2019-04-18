@@ -341,12 +341,14 @@ function renderPlayerList (app) {
   const presenceList = Object.keys(presence).map(uid => presence[uid]);
 
   $playerList.empty();
-  presenceList.forEach(person => {
+
+  const players = app.gameState ? Object.values(app.gameState.players) : presenceList;
+  players.forEach(person => {
     const str = `<li>${person.name}${person.isReady ? '✓' : ''}</li>`;
     $playerList.append(str);
   });
 
-  $peopleCount.text(presenceCount);
+  $peopleCount.text(players.length);
 }
 
 

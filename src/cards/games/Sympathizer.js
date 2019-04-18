@@ -6,8 +6,8 @@ export default {
   id: "game-sympathizer",
   minPlayers: 4,
   cards: [
-    GOOD,
     SPY_SYMPATHIZER,
+    SPY,
     GOOD,
     GOOD,
     SPY,
