@@ -4,12 +4,14 @@ import CustomGame from './cards/games/Custom';
 import NormalGame from './cards/games/Normal';
 import Voting from './voting/PlusMinusVoting';
 import { render, initDom } from './views/View';
+import { guid, setCookie } from './auth/util';
 
 import $ from 'jquery';
 
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
+
 
 const DEBUG = ( document.location.search === '?debug' );
 
@@ -61,6 +63,18 @@ appState.resetGame = function () {
 appState.signIn = function () {
   auth.signIn();
 };
+
+appState.signInGuest = function (username) {
+    const user = {
+      uid: guid(),
+      name: username
+    };
+    const userRef = appState.addPresence(user);
+    userRef.onDisconnect().remove();
+    appState.currentPlayer = user;
+    setCookie("username", username, 365);
+    render(appState);
+}
 
 /* Auth */
 const auth = new Auth({
