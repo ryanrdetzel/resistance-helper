@@ -4,7 +4,7 @@ import CustomGame from './cards/games/Custom';
 import NormalGame from './cards/games/Normal';
 import Voting from './voting/PlusMinusVoting';
 import { render, initDom } from './views/View';
-import { guid, setCookie } from './auth/util';
+import { guid, setCookie, getCookie } from './auth/util';
 
 import $ from 'jquery';
 
@@ -26,7 +26,7 @@ let config = {
 };
 
 if( DEBUG ) {
-  config = {
+  let config = {
     apiKey: 'AIzaSyDhSSM3kQmouCbLmrg1GK-qSMZKuLFAW1k',
     authDomain: 'test-60f3a.firebaseapp.com',
     databaseURL: 'https://test-60f3a.firebaseio.com',
@@ -52,6 +52,11 @@ const appState = window.app = {
 
 $(function () {
   initDom(appState);
+  const guestUser = appState.loadGuestUser();
+  if (guestUser !== undefined) {
+    appState.setupGuestUser(guestUser);
+    appState.currentPlayer = guestUser;
+  }
   render(appState);
 });
 
@@ -69,11 +74,30 @@ appState.signInGuest = function (username) {
       uid: guid(),
       name: username
     };
-    const userRef = appState.addPresence(user);
-    userRef.onDisconnect().remove();
-    appState.currentPlayer = user;
-    setCookie("username", username, 365);
-    render(appState);
+    appState.setupGuestUser(user);
+    setCookie("username", user.name, 365);
+    setCookie("user_uid", user.uid, 365);
+}
+
+appState.loadGuestUser = function () {
+  const userName = getCookie("username");
+  const userUid = getCookie("user_uid");
+  if (userName === undefined || userUid == undefined) {
+    return undefined;
+  }
+  return {
+    uid: userUid,
+    name: userName
+  }
+}
+
+appState.setupGuestUser = function (user) {
+  const userRef = appState.addPresence(user);
+  userRef.onDisconnect().remove();
+  appState.currentPlayer = user;
+  setCookie("username", user.name, 365);
+  setCookie("user_uid", user.uid, 365);
+  render(appState);
 }
 
 /* Auth */
@@ -106,7 +130,13 @@ presenceRef.on('value', function (snap) {
     .filter(p => p.isReady)
     .length;
 
-  const uid = appState.currentPlayer.uid;
+  var uid ;
+  if (appState.currentPlayer === undefined) {
+      uid = appState.loadGuestUser().uid;
+  } else {
+     uid = appState.currentPlayer.uid;
+  }
+
   appState.currentPlayer = appState.presence[uid];
 
   render(appState);

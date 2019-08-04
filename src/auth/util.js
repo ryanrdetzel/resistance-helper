@@ -13,6 +13,10 @@ export function guid() {
     return _p8() + _p8(true) + _p8(true) + _p8();
 }
 
+export function guid_number() {
+    return Math.floor(Math.random() * 100000);
+}
+
 export function getCookie(cname) {
   var name = cname + "=";
   var decodedCookie = decodeURIComponent(document.cookie);
