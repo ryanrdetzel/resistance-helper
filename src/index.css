@@ -25,6 +25,13 @@ strong {
     margin: 0 auto;
 }
 
+.wide-text-input {
+    width: 300px;
+    padding: 4px;
+    display: inline-block;
+    margin: 0 auto;
+}
+
 .player-count {
     padding: 20px 0;
     background: #deeaee;
