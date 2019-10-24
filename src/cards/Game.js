@@ -7,14 +7,12 @@ import DefectorGame from './games/Defector';
 import HunterGame from './games/Hunter';
 import HunterPlusGame from './games/HunterPlus';
 import InquisitorGame from './games/Inquisitor';
-import MacbethGame from './games/Macbeth';
 import NormalGame from './games/Normal';
 import PlotGame from './games/Plot';
 import PretenderGame from './games/Pretender';
 import ReverserGame from './games/Reverser';
 import RogueGame from './games/Rogue';
 import SergeantGame from './games/Sergeant';
-import SecretChief from './games/SecretChief';
 import TrapperGame from './games/Trapper';
 import Sympathizer from "./games/Sympathizer";
 
@@ -33,10 +31,8 @@ export const GAMES = [
   RogueGame,
   SergeantGame,
   PlotGame,
-  MacbethGame,
   AssassinWitness,
   Sympathizer,
-  SecretChief
 ];
 
 const gamesById = {};
