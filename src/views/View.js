@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import Role, {CARD_GROUPS, OBSERVER, sortByTeamType} from '../cards/Roles';
 import {GAMES} from '../cards/Game';
-import { getCookie } from '../auth/util'
 
 export function render(app) {
   renderLobby(app);
@@ -16,8 +15,6 @@ export function initDom(app) {
   const ui = app.ui = {
     $lobby: $('#lobby'),
     $join: $('#join'),
-    $guest_join: $('#guest_join'),
-    $guest_username: $('#guest_username'),
     $newGame: $('#newGame'),
     $ready_btn: $('#ready_btn'),
     $start_custom: $('#start_custom'),
@@ -62,13 +59,6 @@ export function initDom(app) {
   });
 
   ui.$join.click(app.signIn);
-  ui.$guest_join.click( e =>  {
-    var username = ui.$guest_username.val();
-    if (username.length == 0) {
-      return;
-    }
-    app.signInGuest(username);
-  });
 
   ui.$start_custom.click(e => {
     e.preventDefault();
@@ -175,7 +165,7 @@ function renderGameState(app) {
 
 function renderLobby(app) {
   const { currentPlayer, gameState, ui } = app;
-  const { $lobby, $game, $guest_username } = ui;
+  const { $lobby, $game} = ui;
 
   $lobby.hide();
   $game.hide();
@@ -185,10 +175,6 @@ function renderLobby(app) {
   }
 
   if (!currentPlayer){
-    let cookiedUserName = getCookie("username");
-    if (cookiedUserName !== undefined) {
-        $guest_username.val(cookiedUserName);
-    }
     $lobby.show();
     return;
   }
