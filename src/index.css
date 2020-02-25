@@ -92,6 +92,10 @@ li {
     padding: 6px;
 }
 
+#first_player {
+    color: blue;
+}
+
 #sensitive_msg {
     background: rgba(0, 0, 0, 0.05);
     padding: 6px;
