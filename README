@@ -1,0 +1,5 @@
+build locally so we have a dist dir then deploy to firebase hosting
+
+npm run build
+firebase deploy
+
