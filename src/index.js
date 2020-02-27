@@ -128,12 +128,13 @@ appState.toggleUserReady = function (val) {
     val = !user.isReady;
   }
 
-  if (val && appState.readyCount + 1 >= appState.presenceCount){
+  user.isReady = !!val;
+  firebase.database().ref('presence/' + user.uid).update(user);
+
+  if (val && appState.readyCount >= appState.presenceCount){
     const gameType = resolveVoting();
     appState.startGame(gameType);
   }
-  user.isReady = !!val;
-  firebase.database().ref('presence/' + user.uid).update(user);
 };
 
 /* Voting */

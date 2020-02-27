@@ -17,10 +17,8 @@ class PlusMinusVoting {
     });
 
     const values = Object.keys(scores).map(gameType => scores[gameType]);
-
     const maxScore = Math.max.apply(Math, values);
     const winners = Object.keys(scores).filter(gameType => scores[gameType] === maxScore);
-
     if( tiebreak ){
       while ( winners.length > 1){
         winners.splice( Math.floor(Math.random() * winners.length), 1);

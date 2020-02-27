@@ -17,7 +17,6 @@ strong {
     margin: 20px 0;
 }
 
-
 .wide-button {
     width: 300px;
     padding: 8px;
@@ -60,6 +59,16 @@ li {
     background: #AAB8C2;
 }
 
+.playerList li.playerReady {
+    color: green;
+}
+
+.game_list {
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+}
+
 #game_list {
     text-align: center;
     padding: 10px 10px;
@@ -86,6 +95,10 @@ li {
 }
 
 #first_player {
+    color: blue;
+}
+
+#game_type {
     color: blue;
 }
 

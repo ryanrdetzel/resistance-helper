@@ -130,10 +130,10 @@ function renderGameState(app) {
   const $el = $(`<li><b>${role.card}</b></li>`);
 
   if (role.isSpy) {
-    $el.addClass('spy-player');
+    // $el.addClass('spy-player');
   }
   else if (role.isSpy === false){
-    $el.addClass('resistance-player');
+    // $el.addClass('resistance-player');
   }
   $own_role.append($el);
 
@@ -325,7 +325,7 @@ function renderGameStartButton (app) {
   if (!currentPlayer.isReady) {
     $ready_btn
       .addClass('ready-initial')
-      .text('Click when Ready');
+      .text('Touch when Ready');
   }
   else {
     $ready_btn
@@ -344,7 +344,8 @@ function renderPlayerList (app) {
 
   const players = app.gameState ? Object.values(app.gameState.players) : presenceList;
   players.forEach(person => {
-    const str = `<li>${person.name}${person.isReady ? '✓' : ''}</li>`;
+    const playerReady = person.isReady ? 'playerReady' : 'playerNotReady';
+    const str = `<li class="${playerReady}">${person.name}${person.isReady ? '✓' : ''}</li>`;
     $playerList.append(str);
   });
 
